@@ -1,1077 +1,1849 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Oloma Community — Akoko-Edo, Edo State</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<title>Oloma — Community of Akoko-Edo</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --cream: #FAF7F2;
-    --dark: #1A1A18;
-    --earth: #7A5C3A;
-    --gold: #C89A4A;
-    --muted: #6B6B60;
-    --border: #E2DDD5;
-    --white: #FFFFFF;
-  }
+/* ══════════════════════════════════════════════════════
+   ROOT VARIABLES
+══════════════════════════════════════════════════════ */
+:root{
+  --bg:#080807;--surface:#0F0F0D;--panel:#161614;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --white:#F4F2EC;--dim:#888880;--dim2:#555550;
+  --gold:#C89A4A;--gold2:#E8C070;--earth:#7A5C3A;--green:#2A6B40;
+  --red:#c0392b;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none;}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ══ CURSOR ══ */
+#cd{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .2s,height .2s;}
+#cr{position:fixed;width:32px;height:32px;border:1px solid rgba(200,154,74,.4);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .3s cubic-bezier(.25,.46,.45,.94),height .3s cubic-bezier(.25,.46,.45,.94),border-color .3s;}
+#spb{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2));z-index:99997;width:0;}
 
-  html { scroll-behavior: smooth; }
+/* ══ PAGE SYSTEM ══ */
+#page-landing{ display:flex; }
+#page-app{ display:none; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--dark);
-    font-weight: 300;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
+/* ══════════════════════════════════════════════════════
+   LANDING / AUTH PAGE
+══════════════════════════════════════════════════════ */
+#page-landing{
+  flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;padding:2rem;
+  position:relative;overflow:hidden;
+  background:var(--bg);
+}
+#landing-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.landing-vignette{
+  position:absolute;inset:0;z-index:1;
+  background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 10%,rgba(8,8,7,.7) 60%,rgba(8,8,7,.97) 100%);
+}
+.landing-content{position:relative;z-index:2;width:100%;max-width:420px;}
+.landing-logo{
+  text-align:center;margin-bottom:2.5rem;
+  font-family:'Instrument Serif',serif;font-size:2.8rem;font-style:italic;
+  color:var(--white);letter-spacing:-.02em;
+}
+.landing-logo span{color:var(--gold);}
+.landing-tagline{
+  text-align:center;font-size:.78rem;color:var(--dim);
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:.5rem;
+}
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; width: 100%; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.2rem 5%;
-    background: rgba(250,247,242,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    transition: box-shadow 0.3s;
-  }
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    color: var(--dark);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--gold); }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a {
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--muted);
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--dark); }
+/* AUTH CARD */
+.auth-card{
+  background:rgba(15,15,13,.9);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  padding:2rem;
+  backdrop-filter:blur(20px);
+}
+.auth-tabs{display:flex;margin-bottom:1.75rem;background:var(--bg);border-radius:8px;padding:3px;border:1px solid var(--border);}
+.auth-tab{
+  flex:1;padding:.6rem;text-align:center;
+  font-size:.78rem;font-weight:600;letter-spacing:.06em;
+  border-radius:6px;cursor:pointer;
+  color:var(--dim);transition:all .2s;border:none;background:transparent;
+}
+.auth-tab.active{background:var(--white);color:var(--bg);}
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding-top: 80px;
-  }
-  .hero-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 8% 6% 8% 8%;
-    animation: fadeUp 1s ease both;
-  }
-  .hero-eyebrow {
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 32px; height: 1px;
-    background: var(--gold);
-  }
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 6vw, 5.5rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    color: var(--dark);
-    margin-bottom: 1.5rem;
-  }
-  .hero h1 em {
-    font-style: italic;
-    color: var(--earth);
-  }
-  .hero-desc {
-    font-size: 1.05rem;
-    color: var(--muted);
-    max-width: 420px;
-    margin-bottom: 2.5rem;
-    line-height: 1.8;
-  }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.9rem 2rem;
-    background: var(--dark);
-    color: var(--white);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    border-radius: 2px;
-    transition: background 0.2s, transform 0.2s;
-  }
-  .btn:hover { background: var(--earth); transform: translateY(-1px); }
-  .btn-outline {
-    background: transparent;
-    border: 1px solid var(--dark);
-    color: var(--dark);
-  }
-  .btn-outline:hover { background: var(--dark); color: var(--white); }
-  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+/* OAuth Buttons */
+.oauth-btns{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.5rem;}
+.oauth-btn{
+  display:flex;align-items:center;justify-content:center;gap:.75rem;
+  padding:.8rem 1rem;
+  border:1px solid var(--border2);border-radius:8px;
+  background:transparent;color:var(--white);
+  font-family:'Geist',sans-serif;font-size:.85rem;font-weight:500;
+  cursor:pointer;transition:all .25s;width:100%;
+}
+.oauth-btn:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.25);}
+.oauth-icon{width:18px;height:18px;flex-shrink:0;}
 
-  .hero-visual {
-    position: relative;
-    overflow: hidden;
-    animation: fadeIn 1.2s ease both 0.3s;
-  }
-  .hero-visual img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .hero-visual-placeholder {
-    width: 100%; height: 100%;
-    background: linear-gradient(145deg, #C5A97A 0%, #8B6B45 40%, #5C3D1E 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    color: rgba(255,255,255,0.7);
-  }
-  .hero-visual-placeholder svg { opacity: 0.5; }
-  .hero-visual-placeholder p { font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; }
-  .hero-badge {
-    position: absolute;
-    bottom: 2.5rem; left: -1px;
-    background: var(--white);
-    padding: 1rem 1.5rem;
-    border-left: 3px solid var(--gold);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  }
-  .hero-badge strong {
-    display: block;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    color: var(--dark);
-  }
-  .hero-badge span { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.05em; }
+/* Divider */
+.auth-divider{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.auth-divider span{font-size:.72rem;color:var(--dim2);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
 
-  /* ── STATS STRIP ── */
-  .stats-strip {
-    background: var(--dark);
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    overflow: hidden;
-  }
-  .stat-item {
-    flex: 1;
-    max-width: 220px;
-    padding: 2.5rem 2rem;
-    text-align: center;
-    border-right: 1px solid rgba(255,255,255,0.08);
-    animation: fadeUp 0.8s ease both;
-  }
-  .stat-item:last-child { border-right: none; }
-  .stat-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: var(--gold);
-    line-height: 1;
-    margin-bottom: 0.4rem;
-  }
-  .stat-label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+/* Form */
+.auth-form{display:flex;flex-direction:column;gap:.85rem;}
+.af-group{display:flex;flex-direction:column;gap:.35rem;}
+.af-label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2);}
+.af-input{
+  padding:.85rem 1rem;
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  color:var(--white);font-family:'Geist',sans-serif;font-size:.9rem;font-weight:300;
+  outline:none;transition:border-color .2s;width:100%;
+}
+.af-input:focus{border-color:var(--gold);}
+.af-input::placeholder{color:var(--dim2);}
+.af-submit{
+  padding:.9rem;background:var(--white);color:var(--bg);
+  border:none;border-radius:8px;font-family:'Geist',sans-serif;
+  font-size:.85rem;font-weight:700;letter-spacing:.06em;cursor:pointer;
+  transition:all .25s;margin-top:.25rem;
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+}
+.af-submit:hover{background:var(--gold2);}
+.af-submit:disabled{opacity:.6;cursor:not-allowed;}
+.auth-footer-text{text-align:center;margin-top:1rem;font-size:.75rem;color:var(--dim2);}
+.auth-footer-text a{color:var(--gold);text-decoration:none;cursor:pointer;}
+.auth-footer-text a:hover{text-decoration:underline;}
+.auth-error{font-size:.78rem;color:var(--red);background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.25);border-radius:6px;padding:.65rem 1rem;display:none;margin-top:.25rem;}
+.auth-guest{
+  text-align:center;margin-top:1.25rem;
+  font-size:.75rem;color:var(--dim2);
+}
+.auth-guest a{color:var(--dim);text-decoration:none;cursor:pointer;border-bottom:1px solid var(--border2);padding-bottom:1px;transition:color .2s;}
+.auth-guest a:hover{color:var(--white);}
 
-  /* ── SECTIONS ── */
-  section { padding: 7rem 8%; }
+/* ══ FIREBASE STATUS BADGE ══ */
+.fb-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;
+  color:#4caf80;margin-bottom:1rem;justify-content:center;
+  width:100%;
+}
+.fb-badge::before{content:'●';font-size:.4rem;animation:pulse 2s ease infinite;}
 
-  .section-tag {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-    display: flex; align-items: center; gap: 0.75rem;
-  }
-  .section-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+/* ══ AUTH LOADING SPINNER ══ */
+.spin{width:14px;height:14px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;display:none;}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    max-width: 560px;
-    margin-bottom: 1.5rem;
-  }
-  .section-body {
-    font-size: 1rem;
-    color: var(--muted);
-    max-width: 600px;
-    line-height: 1.85;
-  }
+/* ══════════════════════════════════════════════════════
+   SHARED NAV
+══════════════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;width:100%;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;height:64px;
+  border-bottom:1px solid var(--border);
+  background:rgba(8,8,7,.88);backdrop-filter:blur(16px);
+}
+.nav-logo{font-family:'Instrument Serif',serif;font-size:1.2rem;font-style:italic;color:var(--white);text-decoration:none;cursor:pointer;}
+.nav-logo sup{font-size:.5rem;font-style:normal;color:var(--gold);vertical-align:super;}
+.nav-links{display:flex;list-style:none;}
+.nav-links a{
+  padding:0 1rem;height:64px;line-height:64px;
+  font-size:.75rem;font-weight:500;letter-spacing:.06em;
+  color:var(--dim);text-decoration:none;transition:color .2s;cursor:pointer;
+}
+.nav-links a:hover,.nav-links a.nav-active{color:var(--white);}
+.nav-btns{display:flex;gap:.75rem;align-items:center;}
+.nav-user{
+  display:flex;align-items:center;gap:.6rem;
+  font-size:.78rem;color:var(--dim);
+}
+.nav-user-av{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--earth),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:600;color:var(--bg);
+  overflow:hidden;
+}
+.nav-user-av img{width:100%;height:100%;object-fit:cover;}
+.btn-signout{
+  padding:.45rem 1rem;font-size:.72rem;font-weight:500;
+  color:var(--dim);background:transparent;border:1px solid var(--border);
+  border-radius:6px;cursor:pointer;transition:all .2s;
+}
+.btn-signout:hover{color:var(--white);border-color:var(--border2);}
 
-  /* ── ABOUT ── */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-  }
-  .about-image {
-    position: relative;
-    height: 520px;
-  }
-  .about-img-main {
-    width: 80%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 2px;
-    display: block;
-  }
-  .about-img-placeholder {
-    width: 80%;
-    height: 100%;
-    background: linear-gradient(160deg, #D4B896 0%, #A07850 100%);
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.5);
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .about-accent-box {
-    position: absolute;
-    bottom: 2rem; right: 0;
-    width: 200px;
-    background: var(--gold);
-    padding: 1.5rem;
-    border-radius: 2px;
-  }
-  .about-accent-box p { font-size: 0.82rem; color: var(--white); line-height: 1.6; }
-  .about-accent-box strong { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--white); display: block; margin-bottom: 0.3rem; }
+/* ══════════════════════════════════════════════════════
+   SHARED SECTION STYLES
+══════════════════════════════════════════════════════ */
+.page-inner{padding-top:64px;}
+section.sec{padding:7rem 5%;}
+.slabel{font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;}
+.slabel::before{content:'';display:block;width:20px;height:1px;background:var(--gold);}
+.slabel.center{justify-content:center;}.slabel.center::before{display:none;}
+.stitle{font-family:'Instrument Serif',serif;font-size:clamp(2.2rem,4vw,3.8rem);font-weight:400;line-height:1.05;letter-spacing:-.02em;margin-bottom:1rem;}
+.stitle em{font-style:italic;color:var(--gold);}
+.sbody{font-size:.95rem;color:var(--dim);line-height:1.85;max-width:560px;font-weight:300;}
 
-  .about-text { padding-right: 2rem; }
-  .about-text p { margin-bottom: 1.2rem; color: var(--muted); }
+/* ══ TICKER ══ */
+.ticker-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:.9rem 0;white-space:nowrap;}
+.ticker-track{display:inline-flex;animation:ticker 30s linear infinite;}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{display:inline-flex;align-items:baseline;gap:.5rem;padding:0 3rem;border-right:1px solid var(--border);}
+.tn{font-family:'Instrument Serif',serif;font-size:1.4rem;color:var(--gold);}
+.tl{font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);}
+.ts{font-size:.62rem;color:var(--dim2);}
 
-  /* ── PILLARS ── */
-  .pillars { background: var(--white); }
-  .pillars-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem; }
-  .pillars-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    background: var(--border);
-  }
-  .pillar-card {
-    background: var(--white);
-    padding: 2.5rem;
-    transition: background 0.3s;
-    cursor: default;
-  }
-  .pillar-card:hover { background: var(--cream); }
-  .pillar-icon {
-    width: 44px; height: 44px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.2rem;
-  }
-  .pillar-card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-  }
-  .pillar-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.75; }
+/* ══ PAGE HERO ══ */
+.page-hero{
+  min-height:55vh;padding-top:64px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding-left:5%;padding-right:5%;
+  position:relative;overflow:hidden;
+}
+.page-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(200,154,74,.08) 0%,transparent 60%);}
+.page-hero-badge{
+  display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;
+  border:1px solid rgba(200,154,74,.3);border-radius:999px;
+  background:rgba(200,154,74,.08);font-size:.7rem;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:1.5rem;animation:fadeUp .8s ease both;
+}
+.page-hero h1{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(3rem,6vw,5.5rem);font-weight:400;line-height:.95;
+  letter-spacing:-.03em;animation:fadeUp .8s ease .1s both;
+}
+.page-hero h1 em{font-style:italic;color:var(--gold);}
+.page-hero p{
+  font-size:1rem;color:var(--dim);max-width:480px;
+  line-height:1.75;font-weight:300;margin:1.5rem auto 0;
+  animation:fadeUp .8s ease .2s both;
+}
 
-  /* ── CULTURE ── */
-  .culture-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-    margin-top: 4rem;
-  }
-  .culture-card {
-    position: relative;
-    height: 320px;
-    overflow: hidden;
-    border-radius: 2px;
-  }
-  .culture-card:first-child { grid-column: span 2; }
-  .culture-card-bg {
-    width: 100%; height: 100%;
-    transition: transform 0.5s ease;
-  }
-  .culture-card:hover .culture-card-bg { transform: scale(1.04); }
-  .culture-card-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 60%);
-    display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 1.75rem;
-  }
-  .culture-card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    color: var(--white);
-    margin-bottom: 0.25rem;
-  }
-  .culture-card p { font-size: 0.8rem; color: rgba(255,255,255,0.65); }
-  .bg-1 { background: linear-gradient(135deg, #8B5E3C, #C4936A); }
-  .bg-2 { background: linear-gradient(135deg, #3C6B4A, #6BA882); }
-  .bg-3 { background: linear-gradient(135deg, #5C4A7A, #8B72B0); }
-  .bg-4 { background: linear-gradient(135deg, #7A4A3C, #C47A6A); }
-  .bg-5 { background: linear-gradient(135deg, #3C5C6B, #6A9CB0); }
+/* ══ CAPABILITIES ══ */
+.caps-head{text-align:center;margin-bottom:4rem;}
+.caps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+@media(max-width:900px){.caps-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.caps-grid{grid-template-columns:1fr;}}
+.cap-card{background:var(--bg);padding:2.5rem 2rem;transition:background .3s;position:relative;overflow:hidden;}
+.cap-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s ease;}
+.cap-card:hover{background:var(--surface);}
+.cap-card:hover::before{transform:scaleX(1);}
+.cap-num{font-family:'Instrument Serif',serif;font-size:2.5rem;color:rgba(200,154,74,.18);line-height:1;margin-bottom:1.5rem;}
+.cap-card h3{font-size:1rem;font-weight:600;margin-bottom:.75rem;}
+.cap-card p{font-size:.85rem;color:var(--dim);line-height:1.75;font-weight:300;}
 
-  /* ── LEADERSHIP ── */
-  .leadership { background: var(--dark); }
-  .leadership .section-title { color: var(--white); }
-  .leadership .section-body { color: rgba(255,255,255,0.5); }
-  .leadership .section-tag { color: var(--gold); }
-  .leadership .section-tag::before { background: var(--gold); }
-  .leaders-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 2px;
-    margin-top: 4rem;
-    background: rgba(255,255,255,0.05);
-  }
-  .leader-card {
-    background: var(--dark);
-    padding: 2rem;
-    transition: background 0.3s;
-  }
-  .leader-card:hover { background: #242420; }
-  .leader-avatar {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: var(--earth);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    color: var(--white);
-    margin-bottom: 1.2rem;
-    border: 2px solid rgba(200,154,74,0.3);
-  }
-  .leader-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--white);
-    margin-bottom: 0.25rem;
-  }
-  .leader-title { font-size: 0.78rem; color: var(--gold); letter-spacing: 0.06em; }
+/* ══ PROCESS ══ */
+.process{background:var(--surface);}
+.process-inner{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
+@media(max-width:900px){.process-inner{grid-template-columns:1fr;}}
+.pstep{display:flex;gap:2rem;align-items:flex-start;padding:2rem 0;border-bottom:1px solid var(--border);}
+.pstep:last-child{border-bottom:none;}
+.pnum{font-family:'Instrument Serif',serif;font-size:1rem;font-style:italic;color:var(--dim2);width:32px;flex-shrink:0;padding-top:.2rem;}
+.pstep h3{font-size:1.05rem;font-weight:600;margin-bottom:.5rem;}
+.pstep p{font-size:.88rem;color:var(--dim);line-height:1.75;font-weight:300;}
+.code-win{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1.5rem;font-family:'Courier New',monospace;font-size:.8rem;line-height:1.7;color:var(--dim);}
+.fn{color:var(--gold);}.str{color:#8BC4A8;}.kw{color:#C4A0E8;}.cm{color:var(--dim2);}
+.code-badge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.25rem;padding:.5rem 1rem;background:rgba(42,107,64,.15);border:1px solid rgba(42,107,64,.3);border-radius:6px;font-size:.75rem;font-weight:500;color:#6BCF90;}
+.code-badge::before{content:'●';font-size:.5rem;animation:pulse 2s ease infinite;}
 
-  /* ── CONTACT ── */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: start;
-  }
-  .contact-info { padding-right: 3rem; }
-  .contact-detail { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 2rem; }
-  .contact-detail-icon {
-    width: 40px; height: 40px; flex-shrink: 0;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1rem;
-  }
-  .contact-detail h4 { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
-  .contact-detail p { font-size: 0.95rem; color: var(--dark); }
+/* ══ HERITAGE STATS ══ */
+.hstats-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem;flex-wrap:wrap;gap:2rem;}
+.hstats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1px;}
+.hstats-grid2{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);}
+@media(max-width:900px){.hstats-grid,.hstats-grid2{grid-template-columns:1fr 1fr;}}
+.hstat{background:var(--bg);padding:2.5rem;transition:background .3s;}
+.hstat:hover{background:var(--surface);}
+.hstat-val{font-family:'Instrument Serif',serif;font-size:2.8rem;color:var(--gold);line-height:1;margin-bottom:.4rem;}
+.hstat-label{font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
+.hstat-sub{font-size:.7rem;color:var(--dim2);margin-top:.25rem;}
+.live-strip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;margin-top:2rem;}
+.live-dot{display:flex;align-items:center;gap:.6rem;font-size:.75rem;font-weight:500;color:var(--dim);}
+.live-dot::before{content:'';width:7px;height:7px;border-radius:50%;background:#4CAF80;animation:pulse 2s ease infinite;}
+.live-item{text-align:center;}
+.live-val{font-family:'Instrument Serif',serif;font-size:1.6rem;color:var(--white);line-height:1;}
+.live-lbl{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim2);margin-top:.2rem;}
 
-  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-group label { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    padding: 0.85rem 1rem;
-    border: 1px solid var(--border);
-    background: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.92rem;
-    color: var(--dark);
-    border-radius: 2px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .form-group input:focus,
-  .form-group textarea:focus { border-color: var(--gold); }
-  .form-group textarea { resize: vertical; min-height: 120px; }
-  .btn-submit {
-    padding: 1rem 2.5rem;
-    background: var(--dark);
-    color: var(--white);
-    border: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: background 0.2s;
-    align-self: flex-start;
-  }
-  .btn-submit:hover { background: var(--earth); }
+/* ══ CULTURE MARQUEE ══ */
+.culture-sec{background:var(--surface);padding:5rem 0;overflow:hidden;}
+.culture-head{text-align:center;padding:0 5%;margin-bottom:3rem;}
+.mrow{overflow:hidden;white-space:nowrap;margin-bottom:1px;}
+.mtrack{display:inline-flex;gap:1px;}
+.mfwd{animation:mfwd 25s linear infinite;}
+.mrev{animation:mrev 25s linear infinite;}
+@keyframes mfwd{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mrev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.cult-card{flex-shrink:0;width:260px;height:150px;background:var(--panel);border:1px solid var(--border);display:flex;flex-direction:column;justify-content:flex-end;padding:1.25rem;position:relative;overflow:hidden;margin-right:1px;}
+.cbg{position:absolute;inset:0;opacity:.35;}
+.c1{background:linear-gradient(135deg,#3A1500,#8B4A10)}.c2{background:linear-gradient(135deg,#0A2A10,#2A6B3A)}.c3{background:linear-gradient(135deg,#1A0A2A,#5C3A80)}.c4{background:linear-gradient(135deg,#2A1A00,#8B6B20)}.c5{background:linear-gradient(135deg,#002A1A,#206B5C)}.c6{background:linear-gradient(135deg,#2A0A0A,#8B2A2A)}.c7{background:linear-gradient(135deg,#0A0A2A,#204080)}.c8{background:linear-gradient(135deg,#1A2A00,#506B20)}
+.cult-card h4{font-size:.9rem;font-weight:600;position:relative;z-index:1;}
+.cult-card p{font-size:.7rem;color:var(--dim);position:relative;z-index:1;margin-top:.2rem;}
 
-  /* ── FOOTER ── */
-  footer {
-    background: #111110;
-    padding: 4rem 8% 2.5rem;
-  }
-  .footer-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-bottom: 3rem;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    flex-wrap: wrap;
-    gap: 2rem;
-  }
-  .footer-brand .nav-logo { color: var(--white); font-size: 1.4rem; }
-  .footer-brand p { font-size: 0.85rem; color: rgba(255,255,255,0.35); margin-top: 0.75rem; max-width: 280px; line-height: 1.7; }
-  .footer-links h4 { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 1.25rem; }
-  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
-  .footer-links a { font-size: 0.88rem; color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--white); }
-  .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; flex-wrap: wrap; gap: 1rem; }
-  .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.25); }
+/* ══ LEADERSHIP ══ */
+.king-card{background:var(--surface);border:1px solid var(--border);display:grid;grid-template-columns:320px 1fr;min-height:360px;overflow:hidden;margin-bottom:1px;transition:border-color .3s;}
+.king-card:hover{border-color:rgba(200,154,74,.4);}
+@media(max-width:900px){.king-card{grid-template-columns:1fr;}}
+.king-photo{position:relative;background:var(--panel);overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;min-height:280px;}
+.king-photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.king-ph-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;background:linear-gradient(160deg,#1A0E04,#2A1A08);}
+.king-ph-placeholder:hover{background:linear-gradient(160deg,#2A1808,#3A2410);}
+.king-crown{position:absolute;top:1rem;left:1rem;background:var(--gold);padding:.3rem .75rem;border-radius:4px;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--bg);z-index:2;}
+.upload-icon{width:52px;height:52px;border-radius:50%;border:1.5px dashed rgba(200,154,74,.5);display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
+.upload-text{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,154,74,.6);}
+.upload-hint{font-size:.62rem;color:var(--dim2);}
+.king-info{padding:3rem;}
+.king-role{font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.king-name{font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;line-height:1.05;margin-bottom:1.25rem;}
+.king-name em{font-style:italic;color:var(--gold);}
+.king-bio{font-size:.9rem;color:var(--dim);line-height:1.8;font-weight:300;max-width:460px;margin-bottom:1.75rem;}
+.king-meta{display:flex;gap:2rem;flex-wrap:wrap;}
+.km-label{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);}
+.km-val{font-size:.88rem;font-weight:500;margin-top:.2rem;}
+.chiefs-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);}
+@media(max-width:1100px){.chiefs-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:600px){.chiefs-grid{grid-template-columns:repeat(2,1fr);}}
+.chief-card{background:var(--bg);overflow:hidden;border-top:2px solid transparent;transition:all .3s;}
+.chief-card:hover{background:var(--surface);border-color:var(--gold);}
+.chief-photo{width:100%;aspect-ratio:1/1;background:var(--panel);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.chief-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.chief-ph-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;background:linear-gradient(160deg,#0E0E0C,#1A1A14);transition:background .3s;}
+.chief-photo:hover .chief-ph-placeholder{background:linear-gradient(160deg,#1A1A0E,#2A2A18);}
+.chief-cup-icon{font-size:1.3rem;opacity:.4;}
+.chief-cup-text{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim2);}
+.chief-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,7,.7),transparent 50%);opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;justify-content:center;padding:.75rem;}
+.chief-photo:hover .chief-ov{opacity:1;}
+.chief-ov span{font-size:.62rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;}
+.chief-info{padding:1.25rem;}
+.chief-num{font-family:'Instrument Serif',serif;font-size:.8rem;font-style:italic;color:var(--dim2);margin-bottom:.4rem;}
+.chief-name{font-size:.88rem;font-weight:600;margin-bottom:.2rem;}
+.chief-role{font-size:.68rem;color:var(--gold);letter-spacing:.06em;text-transform:uppercase;}
+.file-input{display:none;}
 
-  /* ── DIVIDER ── */
-  .divider { width: 40px; height: 2px; background: var(--gold); margin: 1.5rem 0 2rem; }
+/* ══ CONTACT ══ */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start;}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr;gap:3rem;}}
+.cd-icon{width:36px;height:36px;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:var(--surface);}
+.cd-label{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2);margin-bottom:.2rem;}
+.cd-val{font-size:.9rem;}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:540px){.cf-row{grid-template-columns:1fr;}}
+.cf-g{display:flex;flex-direction:column;gap:.4rem;}
+.cf-lbl{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2);}
+.cf-in{padding:.85rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'Geist',sans-serif;font-size:.9rem;font-weight:300;outline:none;transition:border-color .2s;width:100%;}
+.cf-in:focus{border-color:var(--gold);}
+.cf-in::placeholder{color:var(--dim2);}
+select.cf-in option{background:var(--surface);}
+textarea.cf-in{resize:vertical;min-height:110px;padding-top:.75rem;}
+.cf-sub{padding:.9rem 2rem;background:var(--white);color:var(--bg);border:none;border-radius:6px;font-family:'Geist',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.08em;cursor:pointer;transition:all .25s;align-self:flex-start;}
+.cf-sub:hover{background:var(--gold2);}
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+/* ══ CTA SECTION ══ */
+.cta-section{background:var(--surface);border-top:1px solid var(--border);text-align:center;padding:6rem 5%;position:relative;overflow:hidden;}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(200,154,74,.06) 0%,transparent 70%);}
+.cta-section h2{font-family:'Instrument Serif',serif;font-size:clamp(2rem,5vw,4.5rem);font-weight:400;line-height:1;letter-spacing:-.02em;margin-bottom:1.5rem;position:relative;z-index:1;}
+.cta-section h2 em{font-style:italic;color:var(--gold);}
+.cta-section p{font-size:1rem;color:var(--dim);max-width:480px;margin:0 auto 2.5rem;font-weight:300;position:relative;z-index:1;}
+.cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+.cta-note{font-size:.7rem;color:var(--dim2);margin-top:1rem;position:relative;z-index:1;}
+.btn-h{padding:.85rem 2rem;font-size:.85rem;font-weight:600;letter-spacing:.06em;color:var(--bg);background:var(--white);border:none;border-radius:8px;cursor:pointer;text-decoration:none;transition:all .25s;}
+.btn-h:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 12px 32px rgba(200,154,74,.25);}
+.btn-hg{padding:.85rem 2rem;font-size:.85rem;font-weight:500;letter-spacing:.06em;color:var(--dim);border:1px solid var(--border2);border-radius:8px;cursor:pointer;text-decoration:none;transition:all .25s;}
+.btn-hg:hover{color:var(--white);border-color:rgba(255,255,255,.3);}
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-visual { height: 50vw; min-height: 300px; }
-    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
-    .about-image { height: 320px; }
-    .pillars-grid { grid-template-columns: 1fr; }
-    .culture-grid { grid-template-columns: 1fr 1fr; }
-    .culture-card:first-child { grid-column: span 2; }
-    .nav-links { display: none; }
-    section { padding: 5rem 6%; }
-  }
-  @media (max-width: 540px) {
-    .culture-grid { grid-template-columns: 1fr; }
-    .culture-card:first-child { grid-column: span 1; }
-    .stats-strip { flex-wrap: wrap; }
-    .form-row { grid-template-columns: 1fr; }
-  }
+/* ══ FOOTER ══ */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:4rem 5% 2.5rem;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3.5rem;border-bottom:1px solid var(--border);}
+@media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr;}}
+.footer-brand p{font-size:.82rem;color:var(--dim2);line-height:1.7;max-width:260px;font-weight:300;margin-top:.75rem;}
+.fstatus{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.25rem;padding:.35rem .85rem;background:rgba(42,107,64,.15);border:1px solid rgba(42,107,64,.25);border-radius:999px;font-size:.7rem;color:#6BCF90;}
+.fstatus::before{content:'●';font-size:.45rem;animation:pulse 2s ease infinite;}
+.footer-col h4{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim2);margin-bottom:1.25rem;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.65rem;}
+.footer-col a{font-size:.85rem;color:rgba(255,255,255,.4);text-decoration:none;font-weight:300;transition:color .2s;cursor:pointer;}
+.footer-col a:hover{color:var(--white);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:2rem;flex-wrap:wrap;gap:1rem;}
+.footer-bottom p{font-size:.72rem;color:rgba(255,255,255,.2);font-weight:300;}
 
-  /* ── CURSOR ── */
-  *, *::before, *::after { cursor: none !important; }
-  .cursor-dot {
-    position: fixed; top: 0; left: 0;
-    width: 10px; height: 10px;
-    background: var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99999;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s, background 0.2s, opacity 0.2s;
-    mix-blend-mode: multiply;
-  }
-  .cursor-ring {
-    position: fixed; top: 0; left: 0;
-    width: 38px; height: 38px;
-    border: 1.5px solid var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99998;
-    transform: translate(-50%, -50%);
-    transition: width 0.35s cubic-bezier(.25,.46,.45,.94),
-                height 0.35s cubic-bezier(.25,.46,.45,.94),
-                border-color 0.3s, opacity 0.3s;
-    opacity: 0.7;
-  }
-  .cursor-dot.hovered { width: 6px; height: 6px; background: var(--earth); }
-  .cursor-ring.hovered { width: 58px; height: 58px; border-color: var(--earth); opacity: 0.4; }
-  .cursor-dot.clicking { transform: translate(-50%,-50%) scale(0.6); }
-  .cursor-trail {
-    position: fixed; top: 0; left: 0;
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 99990;
-    transform: translate(-50%, -50%);
-    background: var(--gold);
-    opacity: 0;
-    animation: trailFade 0.6s ease forwards;
-  }
-  @keyframes trailFade {
-    0%   { opacity: 0.45; transform: translate(-50%,-50%) scale(1); }
-    100% { opacity: 0; transform: translate(-50%,-50%) scale(0.1); }
-  }
+/* ══ DICTIONARY PAGE ══ */
+.dict-page{background:#F8F6F0;color:#181714;min-height:100vh;}
+.dict-page *{cursor:auto;}
+.dict-nav{position:fixed;top:0;width:100%;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px;border-bottom:1px solid rgba(0,0,0,.08);background:rgba(248,246,240,.95);backdrop-filter:blur(16px);}
+.dict-logo{font-family:'Instrument Serif',serif;font-size:1.2rem;font-style:italic;color:#181714;text-decoration:none;cursor:pointer;}
+.dict-logo sup{font-size:.5rem;font-style:normal;color:#B8882A;vertical-align:super;}
+.dict-nav-links{display:flex;list-style:none;}
+.dict-nav-links a{padding:0 1rem;height:64px;line-height:64px;font-size:.75rem;font-weight:500;letter-spacing:.06em;color:#666660;text-decoration:none;cursor:pointer;transition:color .2s;}
+.dict-nav-links a:hover,.dict-nav-links a.dactive{color:#181714;}
+.dict-nav-btns{display:flex;gap:.75rem;align-items:center;}
+.d-btn-g{padding:.5rem 1.25rem;font-size:.75rem;font-weight:500;color:#666660;background:transparent;border:1px solid rgba(0,0,0,.14);border-radius:6px;cursor:pointer;transition:all .2s;text-decoration:none;}
+.d-btn-g:hover{color:#181714;}
+.d-btn-p{padding:.5rem 1.25rem;font-size:.75rem;font-weight:600;color:#fff;background:#181714;border:none;border-radius:6px;cursor:pointer;transition:all .2s;}
+.d-btn-p:hover{background:#B8882A;}
+.dict-header{padding:7rem 5% 3rem;border-bottom:1px solid rgba(0,0,0,.08);}
+.dict-header .slabel-d{font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#B8882A;display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;}
+.dict-header .slabel-d::before{content:'';display:block;width:20px;height:1px;background:#B8882A;}
+.dict-header h1{font-family:'Instrument Serif',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:400;line-height:1;letter-spacing:-.02em;margin-bottom:1rem;}
+.dict-header h1 em{font-style:italic;color:#B8882A;}
+.dict-header p{font-size:.95rem;color:#666660;max-width:520px;line-height:1.8;font-weight:300;}
+.dict-controls{padding:2rem 5%;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.08);background:#fff;position:sticky;top:64px;z-index:100;}
+.search-box{display:flex;align-items:center;gap:.75rem;background:#F2EFE8;border:1px solid rgba(0,0,0,.14);border-radius:8px;padding:.7rem 1.1rem;flex:1;max-width:480px;transition:border-color .2s;}
+.search-box:focus-within{border-color:#B8882A;}
+.search-box input{border:none;background:transparent;font-size:.9rem;color:#181714;font-family:'Geist',sans-serif;width:100%;outline:none;}
+.search-box input::placeholder{color:#999990;}
+.filter-btns{display:flex;gap:.4rem;}
+.filter-btn{padding:.45rem 1rem;font-size:.72rem;font-weight:500;border-radius:6px;border:1px solid rgba(0,0,0,.14);background:transparent;color:#666660;cursor:pointer;transition:all .2s;}
+.filter-btn.active,.filter-btn:hover{background:#181714;color:#fff;border-color:#181714;}
+.alpha-bar{padding:.75rem 5%;background:#F8F6F0;border-bottom:1px solid rgba(0,0,0,.08);display:flex;flex-wrap:wrap;gap:.25rem;align-items:center;position:sticky;top:128px;z-index:99;}
+.alpha-btn{width:30px;height:30px;border-radius:4px;border:none;background:transparent;font-size:.75rem;font-weight:500;color:#666660;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.alpha-btn:hover{background:#F2EFE8;}
+.alpha-btn.active{background:#B8882A;color:#fff;}
+.alpha-btn.disabled{color:#999990;cursor:default;}
+.result-count{margin-left:auto;font-size:.72rem;color:#999990;}
+.word-grid{padding:2rem 5%;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:rgba(0,0,0,.08);}
+.word-card{background:#fff;padding:1.5rem 1.75rem;position:relative;overflow:hidden;transition:background .2s;cursor:default;}
+.word-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#B8882A;transform:scaleX(0);transform-origin:left;transition:transform .35s ease;}
+.word-card:hover{background:#F2EFE8;}
+.word-card:hover::before{transform:scaleX(1);}
+.word-num{position:absolute;top:1.25rem;right:1.25rem;font-family:'Instrument Serif',serif;font-size:1.8rem;color:rgba(0,0,0,.05);line-height:1;}
+.word-oloma{font-family:'Instrument Serif',serif;font-size:1.5rem;font-weight:400;color:#181714;margin-bottom:.35rem;line-height:1.1;}
+.word-english{font-size:.82rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#B8882A;}
+/* word source badge */
+.word-source{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#aaa;margin-top:.3rem;}
+.no-results{padding:4rem 5%;text-align:center;color:#666660;}
+.no-results .nr-icon{font-size:3rem;margin-bottom:1rem;}
+.no-results h3{font-family:'Instrument Serif',serif;font-size:1.8rem;margin-bottom:.5rem;}
+/* dict loading */
+.dict-loading{padding:4rem 5%;text-align:center;color:#666660;}
+.dict-loading-spin{width:32px;height:32px;border:2px solid rgba(0,0,0,.1);border-top-color:#B8882A;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 1rem;}
+/* ══ ADMIN ══ */
+.admin-section{padding:4rem 5%;border-top:2px solid rgba(0,0,0,.08);}
+.admin-section h2{font-family:'Instrument Serif',serif;font-size:2.2rem;margin-bottom:2rem;color:#181714;}
+.admin-lock{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;max-width:400px;margin:0 auto;padding:2.5rem;text-align:center;}
+.lock-icon{font-size:2.5rem;margin-bottom:1rem;}
+.admin-lock h3{font-family:'Instrument Serif',serif;font-size:1.6rem;margin-bottom:.5rem;color:#181714;}
+.admin-lock p{font-size:.85rem;color:#666660;margin-bottom:1.5rem;line-height:1.6;}
+.pw-field{width:100%;padding:.75rem 1rem;border:1px solid rgba(0,0,0,.14);border-radius:8px;font-size:.9rem;font-family:'Geist',sans-serif;background:#F8F6F0;color:#181714;outline:none;text-align:center;letter-spacing:.2em;margin-bottom:1rem;transition:border-color .2s;}
+.pw-field:focus{border-color:#B8882A;}
+.unlock-btn{width:100%;padding:.8rem;font-size:.85rem;font-weight:600;background:#181714;color:#fff;border:none;border-radius:8px;cursor:pointer;transition:background .2s;}
+.unlock-btn:hover{background:#B8882A;}
+.pw-error{color:#c0392b;font-size:.8rem;margin-top:.5rem;display:none;}
+.admin-form{display:none;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;max-width:600px;padding:2.5rem;}
+.admin-form.visible{display:block;}
+.admin-form h3{font-family:'Instrument Serif',serif;font-size:1.4rem;margin-bottom:.4rem;color:#181714;}
+.admin-form p{font-size:.82rem;color:#666660;margin-bottom:2rem;line-height:1.6;}
+.d-form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.d-form-group{display:flex;flex-direction:column;gap:.4rem;}
+.d-form-group label{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#666660;}
+.d-form-group input{padding:.7rem 1rem;border:1px solid rgba(0,0,0,.14);border-radius:8px;font-size:.9rem;font-family:'Geist',sans-serif;background:#F8F6F0;color:#181714;outline:none;transition:border-color .2s;}
+.d-form-group input:focus{border-color:#B8882A;}
+.d-form-actions{display:flex;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap;}
+.add-btn{padding:.8rem 1.75rem;font-size:.85rem;font-weight:600;background:#181714;color:#fff;border:none;border-radius:8px;cursor:pointer;transition:background .2s;}
+.add-btn:hover{background:#B8882A;}
+.add-btn:disabled{opacity:.6;cursor:not-allowed;}
+.reset-btn{padding:.8rem 1.25rem;font-size:.85rem;font-weight:500;background:transparent;color:#666660;border:1px solid rgba(0,0,0,.14);border-radius:8px;cursor:pointer;transition:all .2s;}
+.logout-btn{margin-left:auto;padding:.8rem 1.25rem;font-size:.85rem;font-weight:500;background:transparent;color:#c0392b;border:1px solid rgba(192,57,43,.3);border-radius:8px;cursor:pointer;transition:all .2s;}
+.add-success{display:none;padding:1rem;background:rgba(42,107,64,.08);border:1px solid rgba(42,107,64,.2);border-radius:8px;font-size:.85rem;color:#2A6B40;margin-top:1rem;}
+.admin-word-list{margin-top:2rem;}
+.admin-word-list h4{font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#666660;margin-bottom:1rem;}
+.admin-word-item{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;background:#F2EFE8;border-radius:6px;margin-bottom:.4rem;font-size:.85rem;}
+.aw-oloma{font-family:'Instrument Serif',serif;font-size:1rem;}
+.aw-en{color:#666660;}
+.aw-del{background:none;border:none;color:#999990;cursor:pointer;font-size:1rem;transition:color .2s;padding:.2rem;}
+.aw-del:hover{color:#c0392b;}
+.dict-footer{background:#181714;padding:2.5rem 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;margin-top:4rem;}
+.dict-footer-logo{font-family:'Instrument Serif',serif;font-size:1.1rem;font-style:italic;color:#F4F2EC;}
+.dict-footer-copy{font-size:.72rem;color:rgba(255,255,255,.3);}
+.dict-footer-links{display:flex;gap:1.5rem;}
+.dict-footer-links a{font-size:.72rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;cursor:pointer;}
+.dict-footer-links a:hover{color:#fff;}
 
-  /* ── WATERMARK ── */
-  .watermark {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(8rem, 22vw, 22rem);
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    color: var(--dark);
-    opacity: 0.032;
-    pointer-events: none;
-    z-index: 0;
-    user-select: none;
-    white-space: nowrap;
-    animation: watermarkFloat 14s ease-in-out infinite;
-    will-change: transform, opacity;
-  }
-  @keyframes watermarkFloat {
-    0%   { transform: translate(-50%, -50%) scale(1);    opacity: 0.032; }
-    30%  { transform: translate(-50%, -52%) scale(1.03); opacity: 0.048; }
-    60%  { transform: translate(-50%, -48%) scale(0.98); opacity: 0.028; }
-    100% { transform: translate(-50%, -50%) scale(1);    opacity: 0.032; }
-  }
+/* ══ REVEAL ══ */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
 
-  /* hero watermark variant (in the hero section) */
-  .hero-watermark {
-    position: absolute;
-    bottom: -2rem; right: -2rem;
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(7rem, 18vw, 18rem);
-    font-weight: 700;
-    letter-spacing: -0.05em;
-    color: rgba(255,255,255,0.07);
-    pointer-events: none;
-    user-select: none;
-    line-height: 1;
-    animation: heroWatermark 8s ease-in-out infinite;
-  }
-  @keyframes heroWatermark {
-    0%, 100% { opacity: 0.07; transform: scale(1); }
-    50%       { opacity: 0.12; transform: scale(1.02); }
-  }
+/* ══ PAGE TRANSITIONS ══ */
+@keyframes pageIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.page-inner{animation:pageIn .45s ease both;}
 
-  /* ── SECTION WATERMARKS ── */
-  .section-wm {
-    position: absolute;
-    right: 4%;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(5rem, 14vw, 14rem);
-    font-weight: 700;
-    letter-spacing: -0.04em;
-    opacity: 0.04;
-    pointer-events: none;
-    user-select: none;
-    color: var(--dark);
-    line-height: 1;
-    white-space: nowrap;
-  }
-  .leadership .section-wm { color: var(--white); opacity: 0.06; }
-  section { position: relative; overflow: hidden; }
+/* ══ BACK TO TOP ══ */
+#back-top{
+  position:fixed;bottom:2rem;right:2rem;z-index:500;
+  width:42px;height:42px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .3s,background .2s,transform .2s;
+  font-size:.8rem;color:var(--gold);
+}
+#back-top.visible{opacity:1;pointer-events:all;}
+#back-top:hover{background:var(--panel);transform:translateY(-2px);}
 
-  /* ── SCROLL PROGRESS BAR ── */
-  .scroll-progress {
-    position: fixed; top: 0; left: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--gold), var(--earth));
-    z-index: 9999;
-    width: 0%;
-    transition: width 0.05s linear;
-  }
+/* ══ TOAST ══ */
+#toast{
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--panel);border:1px solid var(--border2);
+  border-radius:8px;padding:.75rem 1.5rem;
+  font-size:.82rem;color:var(--white);font-weight:500;
+  z-index:9000;transition:transform .35s cubic-bezier(.25,.46,.45,.94),opacity .35s;
+  opacity:0;white-space:nowrap;
+}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 
-  /* ── REVEAL ── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.75s ease, transform 0.75s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+/* ══ NAV SCROLL SHADOW ══ */
+nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.25);}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ══ MOBILE NAV ══ */
+@media(max-width:900px){
+  .nav-links,.nav-btns{display:none;}
+  section.sec{padding:5rem 5%;}
+}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:transparent;border:none;padding:.5rem;}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .3s;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+@media(max-width:900px){.nav-hamburger{display:flex;}}
+.mobile-drawer{position:fixed;top:64px;left:0;width:100%;background:rgba(8,8,7,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);z-index:199;padding:1.5rem 5%;display:none;flex-direction:column;gap:0;transform:translateY(-10px);opacity:0;transition:transform .25s ease,opacity .25s ease;}
+.mobile-drawer.open{display:flex;transform:translateY(0);opacity:1;}
+.mobile-drawer a{padding:.9rem 0;font-size:.85rem;font-weight:500;letter-spacing:.06em;color:var(--dim);text-decoration:none;cursor:pointer;border-bottom:1px solid var(--border);transition:color .2s;}
+.mobile-drawer a:last-child{border-bottom:none;}
+.mobile-drawer a:hover{color:var(--white);}
+.mobile-drawer .mob-user{display:flex;align-items:center;gap:.75rem;padding:.9rem 0;border-bottom:1px solid var(--border);}
+.mobile-drawer .mob-signout{margin-top:.5rem;padding:.7rem;width:100%;background:transparent;border:1px solid var(--border2);border-radius:6px;color:var(--dim);font-family:'Geist',sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.mobile-drawer .mob-signout:hover{color:var(--white);border-color:rgba(255,255,255,.3);}
+
+/* ══ FORGOT PASSWORD ══ */
+.forgot-link{font-size:.72rem;color:var(--dim2);text-align:right;cursor:pointer;margin-top:-.3rem;}
+.forgot-link:hover{color:var(--gold);}
 </style>
 </head>
 <body>
 
-<!-- SCROLL PROGRESS -->
-<div class="scroll-progress" id="scrollProgress"></div>
+<div id="spb"></div>
+<div id="cd"></div>
+<div id="cr"></div>
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<div id="toast"></div>
 
-<!-- CURSOR -->
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<!-- ══════════════════════════════════════════════════════
+     LANDING PAGE
+══════════════════════════════════════════════════════ -->
+<div id="page-landing">
+  <canvas id="landing-canvas"></canvas>
+  <div class="landing-vignette"></div>
+  <div class="landing-content">
+    <div class="landing-logo">Oloma<span>.</span></div>
+    <div class="landing-tagline">Akoko-Edo · Edo State · Nigeria</div>
 
-<!-- GLOBAL WATERMARK (fixed, full page) -->
-<div class="watermark" id="globalWatermark">OLOMA</div>
+    <div class="auth-card">
+      <div class="fb-badge" id="fb-status">Firebase connected</div>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">Oloma<span>.</span></a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#culture">Culture</a></li>
-    <li><a href="#leadership">Leadership</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
+        <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+      </div>
 
-<!-- HERO -->
-<section class="hero" style="padding:0; padding-top:80px;">
-  <div class="hero-text">
-    <div class="hero-eyebrow">Akoko-Edo · Edo State · Nigeria</div>
-    <h1>Welcome to<br><em>Oloma</em></h1>
-    <p class="hero-desc">A vibrant community nestled in the heart of Akoko-Edo, where ancient traditions meet a forward-looking spirit. Discover our people, our story, and our culture.</p>
-    <div class="hero-btns">
-      <a href="#about" class="btn">Discover Oloma</a>
-      <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      <!-- OAUTH -->
+      <div class="oauth-btns">
+        <button class="oauth-btn" id="btn-google" onclick="oauthGoogle()">
+          <svg class="oauth-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+        <button class="oauth-btn" id="btn-twitter" onclick="oauthTwitter()">
+          <svg class="oauth-icon" viewBox="0 0 24 24" fill="var(--white)">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          Continue with X (Twitter)
+        </button>
+      </div>
+
+      <!-- DIVIDER -->
+      <div class="auth-divider"><span>or continue with email</span></div>
+
+      <!-- SIGN IN FORM -->
+      <div id="form-signin">
+        <div class="auth-form">
+          <div class="af-group">
+            <label class="af-label">Email Address</label>
+            <input class="af-input" type="email" id="si-email" placeholder="you@example.com"/>
+          </div>
+          <div class="af-group">
+            <label class="af-label">Password</label>
+            <input class="af-input" type="password" id="si-pw" placeholder="••••••••"/>
+            <div class="forgot-link" onclick="forgotPassword()">Forgot password?</div>
+          </div>
+          <div class="auth-error" id="si-error"></div>
+          <button class="af-submit" id="btn-signin" onclick="emailSignIn()">
+            <span>Sign In →</span><div class="spin" id="spin-signin"></div>
+          </button>
+        </div>
+        <div class="auth-footer-text">
+          Don't have an account? <a onclick="switchTab('signup')">Sign up free</a>
+        </div>
+      </div>
+
+      <!-- SIGN UP FORM -->
+      <div id="form-signup" style="display:none;">
+        <div class="auth-form">
+          <div class="af-group" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <div>
+              <label class="af-label">First Name</label>
+              <input class="af-input" type="text" id="su-fname" placeholder="Your name"/>
+            </div>
+            <div>
+              <label class="af-label">Last Name</label>
+              <input class="af-input" type="text" id="su-lname" placeholder="Surname"/>
+            </div>
+          </div>
+          <div class="af-group">
+            <label class="af-label">Email Address</label>
+            <input class="af-input" type="email" id="su-email" placeholder="you@example.com"/>
+          </div>
+          <div class="af-group">
+            <label class="af-label">Password</label>
+            <input class="af-input" type="password" id="su-pw" placeholder="Min. 6 characters"/>
+          </div>
+          <div class="af-group">
+            <label class="af-label">Connection to Oloma</label>
+            <select class="af-input" id="su-role">
+              <option value="">Select one</option>
+              <option>Community Member</option>
+              <option>Member of Diaspora</option>
+              <option>Researcher / Journalist</option>
+              <option>Visitor / Tourist</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="auth-error" id="su-error"></div>
+          <button class="af-submit" id="btn-signup" onclick="emailSignUp()">
+            <span>Create Account →</span><div class="spin" id="spin-signup"></div>
+          </button>
+        </div>
+        <div class="auth-footer-text">
+          Already have an account? <a onclick="switchTab('signin')">Sign in</a>
+        </div>
+      </div>
+
+      <div class="auth-guest">
+        <a onclick="enterAsGuest()">Continue as guest →</a>
+      </div>
     </div>
-  </div>
-  <div class="hero-visual">
-    <div class="hero-watermark">OLOMA</div>
-    <div class="hero-visual-placeholder">
-      <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-      <p>Community Photo</p>
-    </div>
-    <div class="hero-badge">
-      <strong>Oloma</strong>
-      <span>Akoko-Edo LGA, Edo State</span>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<div class="stats-strip">
-  <div class="stat-item" style="animation-delay:0.1s">
-    <div class="stat-number">Akoko-Edo</div>
-    <div class="stat-label">Local Government</div>
-  </div>
-  <div class="stat-item" style="animation-delay:0.2s">
-    <div class="stat-number">Edo</div>
-    <div class="stat-label">State</div>
-  </div>
-  <div class="stat-item" style="animation-delay:0.3s">
-    <div class="stat-number">Nigeria</div>
-    <div class="stat-label">Country</div>
-  </div>
-  <div class="stat-item" style="animation-delay:0.4s">
-    <div class="stat-number">Rich</div>
-    <div class="stat-label">Cultural Heritage</div>
   </div>
 </div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-wm">About</div>
-  <div class="about-grid">
-    <div class="about-image">
-      <div class="about-img-placeholder">
-        <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        <span>Add your photo here</span>
-      </div>
-      <div class="about-accent-box">
-        <strong>Proud</strong>
-        <p>A community with deep roots, rich culture and a resilient people.</p>
-      </div>
-    </div>
-    <div class="about-text">
-      <div class="section-tag">Our Story</div>
-      <h2 class="section-title">A Community with Deep Roots</h2>
-      <div class="divider"></div>
-      <p>Oloma is a community located in Akoko-Edo Local Government Area of Edo State, Nigeria. Situated in the northern part of Edo State, Oloma is part of the Akoko-Edo people — a proud and culturally rich group known for their traditions, warmth, and resilience.</p>
-      <p>The community has a long and distinguished history passed down through generations of elders, storytellers, and leaders. Our people have preserved their identity through language, festivals, and a deep connection to the land.</p>
-      <p>Today, Oloma looks forward with ambition — nurturing its youth, celebrating its heritage, and welcoming visitors and members of the diaspora who wish to reconnect with their roots.</p>
-      <a href="#contact" class="btn" style="margin-top:1rem;">Connect With Us</a>
-    </div>
-  </div>
-</section>
+<!-- ══════════════════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════════════════ -->
+<div id="page-app">
 
-<!-- PILLARS -->
-<section class="pillars">
-  <div class="section-wm">Spirit</div>
-  <div class="pillars-header">
-    <div>
-      <div class="section-tag">What Defines Us</div>
-      <h2 class="section-title">The Spirit of Oloma</h2>
+  <!-- SHARED NAV -->
+  <nav id="main-nav">
+    <span class="nav-logo" onclick="navigate('home')">Oloma<sup>TM</sup></span>
+    <ul class="nav-links">
+      <li><a onclick="navigate('heritage')" id="nav-heritage">Heritage</a></li>
+      <li><a onclick="navigate('story')" id="nav-story">Our Story</a></li>
+      <li><a onclick="navigate('culture')" id="nav-culture">Culture</a></li>
+      <li><a onclick="navigate('leadership')" id="nav-leadership">Leadership</a></li>
+      <li><a onclick="navigate('contact')" id="nav-contact">Contact</a></li>
+      <li><a onclick="navigate('dictionary')" id="nav-dictionary">Dictionary</a></li>
+    </ul>
+    <div class="nav-btns">
+      <div class="nav-user">
+        <div class="nav-user-av" id="nav-av">?</div>
+        <span id="nav-uname" style="font-size:.78rem;color:var(--dim);">Guest</span>
+      </div>
+      <button class="btn-signout" onclick="signOut()">Sign Out</button>
     </div>
-    <p class="section-body" style="max-width:360px; font-size:0.92rem;">Our community is built on pillars that have guided generations and continue to shape our identity today.</p>
-  </div>
-  <div class="pillars-grid">
-    <div class="pillar-card">
-      <div class="pillar-icon">🌿</div>
-      <h3>Land & Nature</h3>
-      <p>Oloma is blessed with fertile land, forests, and natural beauty that have sustained our people for generations and remain central to our way of life.</p>
-    </div>
-    <div class="pillar-card">
-      <div class="pillar-icon">🥁</div>
-      <h3>Culture & Tradition</h3>
-      <p>From festivals to language, our cultural traditions are vibrant and alive. We celebrate them with pride and pass them on to every generation.</p>
-    </div>
-    <div class="pillar-card">
-      <div class="pillar-icon">🤝</div>
-      <h3>Community & Unity</h3>
-      <p>The people of Oloma are known for their warmth and collective spirit. We look out for one another and move forward together as one.</p>
-    </div>
-    <div class="pillar-card">
-      <div class="pillar-icon">📚</div>
-      <h3>Education & Youth</h3>
-      <p>We invest in our young people, believing that education and opportunity are the foundations of a thriving community and a bright future.</p>
-    </div>
-    <div class="pillar-card">
-      <div class="pillar-icon">👑</div>
-      <h3>Leadership & Governance</h3>
-      <p>Oloma is guided by respected traditional and community leaders who uphold the values of justice, wisdom, and service to the people.</p>
-    </div>
-    <div class="pillar-card">
-      <div class="pillar-icon">🌍</div>
-      <h3>Diaspora & Connection</h3>
-      <p>Our sons and daughters spread across Nigeria and the world remain deeply connected to Oloma — always part of our story, no matter where they are.</p>
-    </div>
-  </div>
-</section>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
 
-<!-- CULTURE -->
-<section id="culture">
-  <div class="section-wm">Culture</div>
-  <div class="section-tag">Our Heritage</div>
-  <h2 class="section-title">Culture & Festivals</h2>
-  <p class="section-body">Oloma's cultural life is rich and vibrant. Our festivals, music, dances, and ceremonies are a living expression of who we are as a people.</p>
-  <div class="culture-grid">
-    <div class="culture-card">
-      <div class="culture-card-bg bg-1" style="height:100%"></div>
-      <div class="culture-card-overlay">
-        <h3>Annual Community Festival</h3>
-        <p>A celebration of unity, gratitude, and tradition</p>
-      </div>
+  <!-- MOBILE DRAWER -->
+  <div class="mobile-drawer" id="mobile-drawer">
+    <div class="mob-user">
+      <div class="nav-user-av" id="mob-av">?</div>
+      <span id="mob-uname" style="font-size:.85rem;color:var(--dim);">Guest</span>
     </div>
-    <div class="culture-card">
-      <div class="culture-card-bg bg-2" style="height:100%"></div>
-      <div class="culture-card-overlay">
-        <h3>Agricultural Harvest</h3>
-        <p>Giving thanks for the bounty of the land</p>
-      </div>
-    </div>
-    <div class="culture-card">
-      <div class="culture-card-bg bg-3" style="height:100%"></div>
-      <div class="culture-card-overlay">
-        <h3>Traditional Dances</h3>
-        <p>Songs and dances passed down through generations</p>
-      </div>
-    </div>
-    <div class="culture-card">
-      <div class="culture-card-bg bg-4" style="height:100%"></div>
-      <div class="culture-card-overlay">
-        <h3>Youth & Sports Events</h3>
-        <p>Nurturing the next generation of Oloma</p>
-      </div>
-    </div>
-    <div class="culture-card">
-      <div class="culture-card-bg bg-5" style="height:100%"></div>
-      <div class="culture-card-overlay">
-        <h3>Community Gatherings</h3>
-        <p>Where decisions are made and bonds are strengthened</p>
-      </div>
-    </div>
+    <a onclick="mobileNav('heritage')">Heritage</a>
+    <a onclick="mobileNav('story')">Our Story</a>
+    <a onclick="mobileNav('culture')">Culture</a>
+    <a onclick="mobileNav('leadership')">Leadership</a>
+    <a onclick="mobileNav('contact')">Contact</a>
+    <a onclick="mobileNav('dictionary')">Dictionary</a>
+    <button class="mob-signout" onclick="signOut()">Sign Out</button>
   </div>
-</section>
 
-<!-- LEADERSHIP -->
-<section id="leadership" class="leadership">
-  <div class="section-wm">Leaders</div>
-  <div class="section-tag">Our People</div>
-  <h2 class="section-title">Community Leadership</h2>
-  <p class="section-body">Oloma is guided by trusted leaders who serve with wisdom, dedication, and a deep love for the community.</p>
-  <div class="leaders-grid">
-    <div class="leader-card">
-      <div class="leader-avatar">O</div>
-      <div class="leader-name">Community Leader</div>
-      <div class="leader-title">Traditional Ruler</div>
+  <!-- ══ HOME PAGE ══ -->
+  <div id="sub-home" class="page-inner" style="display:block;">
+    <section style="position:relative;min-height:100vh;padding-top:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-left:5%;padding-right:5%;overflow:hidden;">
+      <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;"></canvas>
+      <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 20%,rgba(8,8,7,.6) 70%,rgba(8,8,7,.95) 100%);"></div>
+      <div style="position:relative;z-index:2;">
+        <div class="page-hero-badge">Akoko-Edo · Edo State · Nigeria</div>
+        <h1 style="font-family:'Instrument Serif',serif;font-size:clamp(3.5rem,8vw,8rem);font-weight:400;line-height:.95;letter-spacing:-.03em;animation:fadeUp .8s ease .1s both;">The community<br>for <em style="font-style:italic;color:var(--gold);">Oloma</em></h1>
+        <p style="font-size:1.05rem;color:var(--dim);max-width:520px;line-height:1.75;font-weight:300;margin:1.5rem auto 2.5rem;animation:fadeUp .8s ease .2s both;">Your connection to heritage, culture, and the people of Oloma. Rooted in tradition. Building the future.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s ease .3s both;">
+          <button class="btn-h" onclick="navigate('story')">Discover Oloma</button>
+          <button class="btn-hg" onclick="navigate('contact')">Get involved →</button>
+        </div>
+      </div>
+    </section>
+    <div class="ticker-wrap">
+      <div class="ticker-track">
+        <div class="ticker-item"><span class="tn">Akoko-Edo</span><span class="tl">local government</span><span class="ts">Edo State</span></div>
+        <div class="ticker-item"><span class="tn">Rich</span><span class="tl">cultural heritage</span><span class="ts">Oloma</span></div>
+        <div class="ticker-item"><span class="tn">United</span><span class="tl">community spirit</span><span class="ts">Always</span></div>
+        <div class="ticker-item"><span class="tn">Global</span><span class="tl">diaspora network</span><span class="ts">Worldwide</span></div>
+        <div class="ticker-item"><span class="tn">Proud</span><span class="tl">people of Oloma</span><span class="ts">Nigeria</span></div>
+        <div class="ticker-item"><span class="tn">Rooted</span><span class="tl">in tradition</span><span class="ts">Always</span></div>
+        <div class="ticker-item"><span class="tn">Akoko-Edo</span><span class="tl">local government</span><span class="ts">Edo State</span></div>
+        <div class="ticker-item"><span class="tn">Rich</span><span class="tl">cultural heritage</span><span class="ts">Oloma</span></div>
+        <div class="ticker-item"><span class="tn">United</span><span class="tl">community spirit</span><span class="ts">Always</span></div>
+        <div class="ticker-item"><span class="tn">Global</span><span class="tl">diaspora network</span><span class="ts">Worldwide</span></div>
+        <div class="ticker-item"><span class="tn">Proud</span><span class="tl">people of Oloma</span><span class="ts">Nigeria</span></div>
+        <div class="ticker-item"><span class="tn">Rooted</span><span class="tl">in tradition</span><span class="ts">Always</span></div>
+      </div>
     </div>
-    <div class="leader-card">
-      <div class="leader-avatar">C</div>
-      <div class="leader-name">Community Chairman</div>
-      <div class="leader-title">Development Committee</div>
-    </div>
-    <div class="leader-card">
-      <div class="leader-avatar">Y</div>
-      <div class="leader-name">Youth Leader</div>
-      <div class="leader-title">Youth Council</div>
-    </div>
-    <div class="leader-card">
-      <div class="leader-avatar">W</div>
-      <div class="leader-name">Women's Leader</div>
-      <div class="leader-title">Women's Association</div>
-    </div>
-    <div class="leader-card">
-      <div class="leader-avatar">D</div>
-      <div class="leader-name">Diaspora Rep</div>
-      <div class="leader-title">Oloma Diaspora Union</div>
-    </div>
+    <section class="sec" style="background:var(--surface);">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);" class="reveal">
+        <div class="cap-card" onclick="navigate('heritage')" style="cursor:pointer;"><div class="cap-num">01</div><h3>Heritage</h3><p>Discover the history, language, and roots of the Oloma community stretching back centuries.</p></div>
+        <div class="cap-card" onclick="navigate('culture')" style="cursor:pointer;"><div class="cap-num">02</div><h3>Culture</h3><p>Explore festivals, dances, music, oral histories and the living cultural spirit of Oloma.</p></div>
+        <div class="cap-card" onclick="navigate('leadership')" style="cursor:pointer;"><div class="cap-num">03</div><h3>Leadership</h3><p>Meet the Ogwa of Oloma and the chiefs who guide and serve our community with wisdom.</p></div>
+        <div class="cap-card" onclick="navigate('story')" style="cursor:pointer;"><div class="cap-num">04</div><h3>Our Story</h3><p>Three chapters. One people. Read the journey of Oloma from ancient roots to the digital age.</p></div>
+        <div class="cap-card" onclick="navigate('dictionary')" style="cursor:pointer;"><div class="cap-num">05</div><h3>Dictionary</h3><p>Explore 300+ words in the Ọ́lọ̀mà language — search, filter, and add new entries.</p></div>
+        <div class="cap-card" onclick="navigate('contact')" style="cursor:pointer;"><div class="cap-num">06</div><h3>Connect</h3><p>Whether community, diaspora, or visitor — Oloma is always open. Reach out today.</p></div>
+      </div>
+    </section>
+    <footer>
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="nav-logo" onclick="navigate('home')">Oloma<sup style="font-size:.5rem;color:var(--gold)">TM</sup></span>
+          <p>The community platform for Oloma — Akoko-Edo LGA, Edo State, Nigeria. Rooted in tradition. Building the future.</p>
+          <div class="fstatus">All systems operational</div>
+        </div>
+        <div class="footer-col"><h4>Pages</h4><ul><li><a onclick="navigate('heritage')">Heritage</a></li><li><a onclick="navigate('story')">Our Story</a></li><li><a onclick="navigate('culture')">Culture</a></li><li><a onclick="navigate('leadership')">Leadership</a></li></ul></div>
+        <div class="footer-col"><h4>Community</h4><ul><li><a onclick="navigate('contact')">Contact</a></li><li><a onclick="navigate('dictionary')">Dictionary</a></li></ul></div>
+        <div class="footer-col"><h4>Social</h4><ul><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li><li><a href="#">YouTube</a></li><li><a href="#">TikTok</a></li></ul></div>
+        <div class="footer-col"><h4>Info</h4><ul><li><a href="#">Wikipedia</a></li><li><a href="#">Google Maps</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Oloma Community, Akoko-Edo LGA, Edo State, Nigeria. All rights reserved.</p>
+        <p>Building Oloma's Digital Footprint</p>
+      </div>
+    </footer>
   </div>
-  <p style="font-size:0.82rem; color:rgba(255,255,255,0.3); margin-top:2rem;">* Leader names to be updated by community administrator</p>
-</section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-wm">Connect</div>
-  <div class="contact-grid">
-    <div class="contact-info">
-      <div class="section-tag">Reach Out</div>
-      <h2 class="section-title">Get In Touch With Oloma</h2>
-      <div class="divider"></div>
-      <p class="section-body" style="margin-bottom:2.5rem;">Whether you're a community member, a visitor, a researcher, or a member of the diaspora — we'd love to hear from you.</p>
+  <!-- ══ HERITAGE PAGE ══ -->
+  <div id="sub-heritage" class="page-inner" style="display:none;">
+    <div class="page-hero">
+      <div class="page-hero-bg"></div>
+      <div class="page-hero-badge">History · Language · Identity</div>
+      <h1>Heritage of<br><em>Oloma</em></h1>
+      <p>A community whose roots stretch back through centuries — measured in history, culture, language, and people spread across the globe.</p>
+    </div>
+    <section class="sec">
+      <div class="hstats-head reveal">
+        <div><div class="slabel">Heritage</div><h2 class="stitle">History by<br><em>the numbers.</em></h2></div>
+        <p class="sbody">A community whose roots run deep — measured in history, culture, language, and people spread across the globe.</p>
+      </div>
+      <div class="hstats-grid reveal">
+        <div class="hstat"><div class="hstat-val">Edoid</div><div class="hstat-label">Language Family</div><div class="hstat-sub">Northwest branch · Niger-Congo</div></div>
+        <div class="hstat"><div class="hstat-val">Akoko-Edo</div><div class="hstat-label">Local Government</div><div class="hstat-sub">Edo State, Nigeria</div></div>
+        <div class="hstat"><div class="hstat-val">100%</div><div class="hstat-label">Community Pride</div><div class="hstat-sub">Always</div></div>
+      </div>
+      <div class="hstats-grid2 reveal">
+        <div class="hstat"><div class="hstat-val">Nigeria</div><div class="hstat-label">Country</div><div class="hstat-sub">West Africa</div></div>
+        <div class="hstat"><div class="hstat-val">United</div><div class="hstat-label">Community Spirit</div><div class="hstat-sub">Always</div></div>
+        <div class="hstat"><div class="hstat-val">100%</div><div class="hstat-label">Cultural Pride</div><div class="hstat-sub">Always</div></div>
+        <div class="hstat"><div class="hstat-val">∞</div><div class="hstat-label">Cultural Legacy</div><div class="hstat-sub">Passed down forever</div></div>
+      </div>
+      <div class="live-strip reveal">
+        <div class="live-dot">Live community</div>
+        <div class="live-item"><div class="live-val" id="lv1">—</div><div class="live-lbl">Members Online</div></div>
+        <div class="live-item"><div class="live-val" id="lv2">—</div><div class="live-lbl">Events This Year</div></div>
+        <div class="live-item"><div class="live-val" id="lv3">—</div><div class="live-lbl">Diaspora Countries</div></div>
+        <div class="live-item"><div class="live-val" id="lv4">—</div><div class="live-lbl">Years of History</div></div>
+      </div>
+    </section>
+    <section class="sec" style="background:var(--surface);">
+      <div class="caps-head reveal"><div class="slabel center">What defines us</div><h2 class="stitle" style="text-align:center;margin:0 auto 1rem;">Everything <em>Oloma</em>.</h2><p class="sbody" style="margin:0 auto;text-align:center;">Six pillars that have held our community together across every generation.</p></div>
+      <div class="caps-grid reveal">
+        <div class="cap-card"><div class="cap-num">01</div><h3>Land & Nature</h3><p>Fertile land, forests, and rivers that have nourished our people and remain at the heart of who we are.</p></div>
+        <div class="cap-card"><div class="cap-num">02</div><h3>Culture & Tradition</h3><p>Festivals, dances, music, and oral histories that keep the spirit of Oloma alive in every gathering.</p></div>
+        <div class="cap-card"><div class="cap-num">03</div><h3>Community Unity</h3><p>We move as one. The bonds between Oloma's families run deep — built on trust and shared triumph.</p></div>
+        <div class="cap-card"><div class="cap-num">04</div><h3>Youth & Education</h3><p>The next generation carries the torch. We invest in their education with the full force of our community.</p></div>
+        <div class="cap-card"><div class="cap-num">05</div><h3>Leadership</h3><p>Guided by wise traditional leaders who serve with honour and carry the voice of the people forward.</p></div>
+        <div class="cap-card"><div class="cap-num">06</div><h3>Diaspora & Roots</h3><p>Wherever our people live, Oloma is home. Our diaspora is a powerful extension of our community.</p></div>
+      </div>
+    </section>
+    <footer>
+      <div class="footer-top">
+        <div class="footer-brand"><span class="nav-logo" onclick="navigate('home')" style="cursor:pointer;">Oloma<sup style="font-size:.5rem;color:var(--gold)">TM</sup></span><p>The community platform for Oloma — Akoko-Edo LGA, Edo State, Nigeria.</p><div class="fstatus">All systems operational</div></div>
+        <div class="footer-col"><h4>Pages</h4><ul><li><a onclick="navigate('heritage')">Heritage</a></li><li><a onclick="navigate('story')">Our Story</a></li><li><a onclick="navigate('culture')">Culture</a></li><li><a onclick="navigate('leadership')">Leadership</a></li></ul></div>
+        <div class="footer-col"><h4>Community</h4><ul><li><a onclick="navigate('contact')">Contact</a></li><li><a onclick="navigate('dictionary')">Dictionary</a></li></ul></div>
+        <div class="footer-col"><h4>Social</h4><ul><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li><li><a href="#">YouTube</a></li></ul></div>
+        <div class="footer-col"><h4>Info</h4><ul><li><a href="#">Wikipedia</a></li><li><a href="#">Google Maps</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 Oloma Community, Akoko-Edo LGA, Edo State, Nigeria. All rights reserved.</p><p>Building Oloma's Digital Footprint</p></div>
+    </footer>
+  </div>
 
-      <div class="contact-detail">
-        <div class="contact-detail-icon">📍</div>
+  <!-- ══ OUR STORY PAGE ══ -->
+  <div id="sub-story" class="page-inner" style="display:none;">
+    <div class="page-hero">
+      <div class="page-hero-bg"></div>
+      <div class="page-hero-badge">History · Origin · Future</div>
+      <h1>Three chapters.<br><em>One people.</em></h1>
+      <p>The journey of Oloma — from ancient roots in Akoko-Edo to a vibrant community with a global presence.</p>
+    </div>
+    <section class="sec process">
+      <div class="process-inner">
         <div>
-          <h4>Location</h4>
-          <p>Oloma Community, Akoko-Edo LGA,<br>Edo State, Nigeria</p>
+          <div class="slabel reveal">Our Story</div>
+          <h2 class="stitle reveal">The Journey of<br><em>Oloma</em></h2>
+          <div class="reveal">
+            <div class="pstep"><div class="pnum">I</div><div><h3>Roots in Akoko-Edo</h3><p>Oloma is a community in Akoko-Edo Local Government Area of Edo State, Nigeria. Part of the Edoid language family, our people have deep and distinguished roots going back centuries. Our existence was first formally documented in the 19th century as part of the linguistic study of the Edoid peoples.</p></div></div>
+            <div class="pstep"><div class="pnum">II</div><div><h3>A Living Culture</h3><p>Our history breathes through festivals, language, dances, and the stories of our elders. Oloma has preserved its identity through connection to the land and to each other across every generation. The Ọ́lọ̀mà language, with its rich noun class system and concord patterns, is a unique and living heritage.</p></div></div>
+            <div class="pstep"><div class="pnum">III</div><div><h3>Building the Future</h3><p>Today, Oloma looks forward — nurturing youth, celebrating heritage, and building a digital presence so our story reaches every corner of the world where Oloma people live.</p></div></div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:2rem;">
+            <div class="code-win">
+              <div><span class="cm">// Oloma community.json</span></div>
+              <div>&nbsp;</div>
+              <div><span class="fn">community</span>.<span class="fn">connect</span>({</div>
+              <div>&nbsp;&nbsp;<span class="kw">location</span>: <span class="str">"Akoko-Edo, Edo State"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="kw">language</span>: <span class="str">"Oloma (Edoid)"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="kw">diaspora</span>: <span class="fn">true</span>,</div>
+              <div>&nbsp;&nbsp;<span class="kw">auth</span>: <span class="str">"Firebase"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="kw">database</span>: <span class="str">"Firestore"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="kw">unity</span>: <span class="str">"unbreakable"</span>,</div>
+              <div>&nbsp;&nbsp;<span class="kw">future</span>: <span class="str">"bright"</span></div>
+              <div>})</div>
+            </div>
+            <div class="code-badge">Community active · Firebase live</div>
+          </div>
         </div>
       </div>
-      <div class="contact-detail">
-        <div class="contact-detail-icon">🌐</div>
-        <div>
-          <h4>LGA</h4>
-          <p>Akoko-Edo Local Government Area</p>
-        </div>
+    </section>
+    <footer>
+      <div class="footer-top">
+        <div class="footer-brand"><span class="nav-logo" onclick="navigate('home')" style="cursor:pointer;">Oloma<sup style="font-size:.5rem;color:var(--gold)">TM</sup></span><p>The community platform for Oloma — Akoko-Edo LGA, Edo State, Nigeria.</p><div class="fstatus">All systems operational</div></div>
+        <div class="footer-col"><h4>Pages</h4><ul><li><a onclick="navigate('heritage')">Heritage</a></li><li><a onclick="navigate('story')">Our Story</a></li><li><a onclick="navigate('culture')">Culture</a></li><li><a onclick="navigate('leadership')">Leadership</a></li></ul></div>
+        <div class="footer-col"><h4>Community</h4><ul><li><a onclick="navigate('contact')">Contact</a></li><li><a onclick="navigate('dictionary')">Dictionary</a></li></ul></div>
+        <div class="footer-col"><h4>Social</h4><ul><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li></ul></div>
+        <div class="footer-col"><h4>Info</h4><ul><li><a href="#">Wikipedia</a></li><li><a href="#">Google Maps</a></li></ul></div>
       </div>
-      <div class="contact-detail">
-        <div class="contact-detail-icon">📧</div>
-        <div>
-          <h4>Email</h4>
-          <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="274e49414867484b484a4644484a4a52494e535e09485540">[email&#160;protected]</a></p>
-        </div>
-      </div>
-    </div>
-
-    <form class="contact-form" onsubmit="handleSubmit(event)">
-      <div class="form-row">
-        <div class="form-group">
-          <label>First Name</label>
-          <input type="text" placeholder="Your first name" />
-        </div>
-        <div class="form-group">
-          <label>Last Name</label>
-          <input type="text" placeholder="Your last name" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="your@email.com" />
-      </div>
-      <div class="form-group">
-        <label>I am a...</label>
-        <select>
-          <option value="">Select one</option>
-          <option>Community Member</option>
-          <option>Member of Diaspora</option>
-          <option>Researcher / Journalist</option>
-          <option>Visitor / Tourist</option>
-          <option>Government Official</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Message</label>
-        <textarea placeholder="How can we help you?"></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Send Message →</button>
-    </form>
+      <div class="footer-bottom"><p>© 2025 Oloma Community, Akoko-Edo LGA, Edo State, Nigeria. All rights reserved.</p><p>Building Oloma's Digital Footprint</p></div>
+    </footer>
   </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <a href="#" class="nav-logo">Oloma<span style="color:var(--gold)">.</span></a>
-      <p>A proud community in Akoko-Edo LGA, Edo State, Nigeria. Rich in culture, united in spirit.</p>
+  <!-- ══ CULTURE PAGE ══ -->
+  <div id="sub-culture" class="page-inner" style="display:none;">
+    <div class="page-hero">
+      <div class="page-hero-bg"></div>
+      <div class="page-hero-badge">Festivals · Music · Traditions</div>
+      <h1>Culture &<br><em>Festivals</em></h1>
+      <p>Our cultural life is rich and vibrant. Festivals, music, dances, and ceremonies are a living expression of who we are as a people.</p>
     </div>
-    <div class="footer-links">
-      <h4>Navigate</h4>
-      <ul>
-        <li><a href="#about">About Oloma</a></li>
-        <li><a href="#culture">Culture & Festivals</a></li>
-        <li><a href="#leadership">Leadership</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+    <section class="culture-sec">
+      <div class="culture-head reveal"><div class="slabel center">Cultural ecosystem</div><h2 class="stitle" style="text-align:center;margin:0 auto 1rem;">Works with everything<br><em>we already are.</em></h2><p class="sbody" style="margin:0 auto;text-align:center;">Festivals, language, art, food, music, governance — all connected.</p></div>
+      <div class="mrow"><div class="mtrack mfwd">
+        <div class="cult-card"><div class="cbg c1"></div><h4>Annual Festival</h4><p>Unity & gratitude</p></div>
+        <div class="cult-card"><div class="cbg c2"></div><h4>Harvest Ceremony</h4><p>Land & abundance</p></div>
+        <div class="cult-card"><div class="cbg c3"></div><h4>Traditional Dance</h4><p>Ancient rhythms</p></div>
+        <div class="cult-card"><div class="cbg c4"></div><h4>Oloma Language</h4><p>Edoid · living tongue</p></div>
+        <div class="cult-card"><div class="cbg c5"></div><h4>Community Assembly</h4><p>Governance & voice</p></div>
+        <div class="cult-card"><div class="cbg c6"></div><h4>Youth Events</h4><p>Next generation</p></div>
+        <div class="cult-card"><div class="cbg c7"></div><h4>Elder Councils</h4><p>Wisdom & heritage</p></div>
+        <div class="cult-card"><div class="cbg c8"></div><h4>Diaspora Union</h4><p>Global community</p></div>
+        <div class="cult-card"><div class="cbg c1"></div><h4>Annual Festival</h4><p>Unity & gratitude</p></div>
+        <div class="cult-card"><div class="cbg c2"></div><h4>Harvest Ceremony</h4><p>Land & abundance</p></div>
+        <div class="cult-card"><div class="cbg c3"></div><h4>Traditional Dance</h4><p>Ancient rhythms</p></div>
+        <div class="cult-card"><div class="cbg c4"></div><h4>Oloma Language</h4><p>Edoid · living tongue</p></div>
+        <div class="cult-card"><div class="cbg c5"></div><h4>Community Assembly</h4><p>Governance & voice</p></div>
+        <div class="cult-card"><div class="cbg c6"></div><h4>Youth Events</h4><p>Next generation</p></div>
+        <div class="cult-card"><div class="cbg c7"></div><h4>Elder Councils</h4><p>Wisdom & heritage</p></div>
+        <div class="cult-card"><div class="cbg c8"></div><h4>Diaspora Union</h4><p>Global community</p></div>
+      </div></div>
+      <div style="height:1px;"></div>
+      <div class="mrow"><div class="mtrack mrev">
+        <div class="cult-card"><div class="cbg c5"></div><h4>Traditional Food</h4><p>Taste of home</p></div>
+        <div class="cult-card"><div class="cbg c6"></div><h4>Oral History</h4><p>Elders & stories</p></div>
+        <div class="cult-card"><div class="cbg c7"></div><h4>Artisan Crafts</h4><p>Handmade heritage</p></div>
+        <div class="cult-card"><div class="cbg c8"></div><h4>Music & Drums</h4><p>Rhythm of Oloma</p></div>
+        <div class="cult-card"><div class="cbg c1"></div><h4>Marriage Rites</h4><p>Union & family</p></div>
+        <div class="cult-card"><div class="cbg c2"></div><h4>Naming Ceremony</h4><p>Birth & identity</p></div>
+        <div class="cult-card"><div class="cbg c3"></div><h4>Farming Seasons</h4><p>Cycles of the land</p></div>
+        <div class="cult-card"><div class="cbg c4"></div><h4>Spiritual Rites</h4><p>Ancestors & belief</p></div>
+        <div class="cult-card"><div class="cbg c5"></div><h4>Traditional Food</h4><p>Taste of home</p></div>
+        <div class="cult-card"><div class="cbg c6"></div><h4>Oral History</h4><p>Elders & stories</p></div>
+        <div class="cult-card"><div class="cbg c7"></div><h4>Artisan Crafts</h4><p>Handmade heritage</p></div>
+        <div class="cult-card"><div class="cbg c8"></div><h4>Music & Drums</h4><p>Rhythm of Oloma</p></div>
+        <div class="cult-card"><div class="cbg c1"></div><h4>Marriage Rites</h4><p>Union & family</p></div>
+        <div class="cult-card"><div class="cbg c2"></div><h4>Naming Ceremony</h4><p>Birth & identity</p></div>
+        <div class="cult-card"><div class="cbg c3"></div><h4>Farming Seasons</h4><p>Cycles of the land</p></div>
+        <div class="cult-card"><div class="cbg c4"></div><h4>Spiritual Rites</h4><p>Ancestors & belief</p></div>
+      </div></div>
+    </section>
+    <footer>
+      <div class="footer-top">
+        <div class="footer-brand"><span class="nav-logo" onclick="navigate('home')" style="cursor:pointer;">Oloma<sup style="font-size:.5rem;color:var(--gold)">TM</sup></span><p>The community platform for Oloma — Akoko-Edo LGA, Edo State, Nigeria.</p><div class="fstatus">All systems operational</div></div>
+        <div class="footer-col"><h4>Pages</h4><ul><li><a onclick="navigate('heritage')">Heritage</a></li><li><a onclick="navigate('story')">Our Story</a></li><li><a onclick="navigate('culture')">Culture</a></li><li><a onclick="navigate('leadership')">Leadership</a></li></ul></div>
+        <div class="footer-col"><h4>Community</h4><ul><li><a onclick="navigate('contact')">Contact</a></li><li><a onclick="navigate('dictionary')">Dictionary</a></li></ul></div>
+        <div class="footer-col"><h4>Social</h4><ul><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li></ul></div>
+        <div class="footer-col"><h4>Info</h4><ul><li><a href="#">Wikipedia</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 Oloma Community, Akoko-Edo LGA, Edo State, Nigeria. All rights reserved.</p><p>Building Oloma's Digital Footprint</p></div>
+    </footer>
+  </div>
+
+  <!-- ══ LEADERSHIP PAGE ══ -->
+  <div id="sub-leadership" class="page-inner" style="display:none;">
+    <div class="page-hero">
+      <div class="page-hero-bg"></div>
+      <div class="page-hero-badge">Ogwa · Chiefs · Community Leaders</div>
+      <h1>Built by the people.<br><em>For the people.</em></h1>
+      <p>Trusted leaders who serve with wisdom, dedication, and a deep love for Oloma.</p>
     </div>
-    <div class="footer-links">
-      <h4>Community</h4>
-      <ul>
-        <li><a href="#">Facebook Page</a></li>
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">YouTube</a></li>
-        <li><a href="#">Diaspora Union</a></li>
-      </ul>
+    <section class="sec">
+      <div class="slabel reveal">Community Leaders</div>
+      <div class="reveal" style="margin-bottom:1px;">
+        <div class="king-card">
+          <div class="king-photo" onclick="triggerUpload('king-input')">
+            <span class="king-crown">👑 Ogwa of Oloma</span>
+            <img id="king-img" src="" alt="" style="display:none;"/>
+            <div class="king-ph-placeholder" id="king-placeholder">
+              <div class="upload-icon">+</div>
+              <div class="upload-text">Upload photo</div>
+              <div class="upload-hint">Click to add image</div>
+            </div>
+            <input type="file" class="file-input" id="king-input" accept="image/*" onchange="loadImg(this,'king-img','king-placeholder')"/>
+          </div>
+          <div class="king-info">
+            <div class="king-role">Traditional Ruler · Ogwa of Oloma</div>
+            <h3 class="king-name">His Royal Highness AIBOGJE IDIABEKHAI<br><em>The Ogwa of Oloma</em></h3>
+            <p class="king-bio">The paramount ruler of Oloma community, custodian of our traditions, culture, and the collective wellbeing of all Oloma people — at home and in the diaspora.</p>
+            <div class="king-meta">
+              <div><div class="km-label">Title</div><div class="km-val">Ogwa</div></div>
+              <div><div class="km-label">Community</div><div class="km-val">Oloma</div></div>
+              <div><div class="km-label">LGA</div><div class="km-val">Akoko-Edo</div></div>
+              <div><div class="km-label">State</div><div class="km-val">Edo, Nigeria</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chiefs-grid reveal">
+        <div class="chief-card"><div class="chief-photo" onclick="triggerUpload('c1-input')"><img id="c1-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;"/><div class="chief-ph-placeholder" id="c1-placeholder"><div class="chief-cup-icon">📷</div><div class="chief-cup-text">Add photo</div></div><div class="chief-ov"><span>Upload photo</span></div><input type="file" class="file-input" id="c1-input" accept="image/*" onchange="loadImg(this,'c1-img','c1-placeholder')"/></div><div class="chief-info"><div class="chief-num">Chief I</div><div class="chief-name">Community Chief</div><div class="chief-role">Development Committee</div></div></div>
+        <div class="chief-card"><div class="chief-photo" onclick="triggerUpload('c2-input')"><img id="c2-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;"/><div class="chief-ph-placeholder" id="c2-placeholder"><div class="chief-cup-icon">📷</div><div class="chief-cup-text">Add photo</div></div><div class="chief-ov"><span>Upload photo</span></div><input type="file" class="file-input" id="c2-input" accept="image/*" onchange="loadImg(this,'c2-img','c2-placeholder')"/></div><div class="chief-info"><div class="chief-num">Chief II</div><div class="chief-name">Community Chief</div><div class="chief-role">Traditional Affairs</div></div></div>
+        <div class="chief-card"><div class="chief-photo" onclick="triggerUpload('c3-input')"><img id="c3-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;"/><div class="chief-ph-placeholder" id="c3-placeholder"><div class="chief-cup-icon">📷</div><div class="chief-cup-text">Add photo</div></div><div class="chief-ov"><span>Upload photo</span></div><input type="file" class="file-input" id="c3-input" accept="image/*" onchange="loadImg(this,'c3-img','c3-placeholder')"/></div><div class="chief-info"><div class="chief-num">Chief III</div><div class="chief-name">Community Chief</div><div class="chief-role">Youth &amp; Education</div></div></div>
+        <div class="chief-card"><div class="chief-photo" onclick="triggerUpload('c4-input')"><img id="c4-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;"/><div class="chief-ph-placeholder" id="c4-placeholder"><div class="chief-cup-icon">📷</div><div class="chief-cup-text">Add photo</div></div><div class="chief-ov"><span>Upload photo</span></div><input type="file" class="file-input" id="c4-input" accept="image/*" onchange="loadImg(this,'c4-img','c4-placeholder')"/></div><div class="chief-info"><div class="chief-num">Chief IV</div><div class="chief-name">Community Chief</div><div class="chief-role">Security &amp; Peace</div></div></div>
+        <div class="chief-card"><div class="chief-photo" onclick="triggerUpload('c5-input')"><img id="c5-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;"/><div class="chief-ph-placeholder" id="c5-placeholder"><div class="chief-cup-icon">📷</div><div class="chief-cup-text">Add photo</div></div><div class="chief-ov"><span>Upload photo</span></div><input type="file" class="file-input" id="c5-input" accept="image/*" onchange="loadImg(this,'c5-img','c5-placeholder')"/></div><div class="chief-info"><div class="chief-num">Chief V</div><div class="chief-name">Community Chief</div><div class="chief-role">Agriculture &amp; Land</div></div></div>
+        <div class="chief-card"><div class="chief-photo" onclick="triggerUpload('c6-input')"><img id="c6-img" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;"/><div class="chief-ph-placeholder" id="c6-placeholder"><div class="chief-cup-icon">📷</div><div class="chief-cup-text">Add photo</div></div><div class="chief-ov"><span>Upload photo</span></div><input type="file" class="file-input" id="c6-input" accept="image/*" onchange="loadImg(this,'c6-img','c6-placeholder')"/></div><div class="chief-info"><div class="chief-num">Chief VI</div><div class="chief-name">Community Chief</div><div class="chief-role">Diaspora Liaison</div></div></div>
+      </div>
+    </section>
+    <footer>
+      <div class="footer-top">
+        <div class="footer-brand"><span class="nav-logo" onclick="navigate('home')" style="cursor:pointer;">Oloma<sup style="font-size:.5rem;color:var(--gold)">TM</sup></span><p>The community platform for Oloma — Akoko-Edo LGA, Edo State, Nigeria.</p><div class="fstatus">All systems operational</div></div>
+        <div class="footer-col"><h4>Pages</h4><ul><li><a onclick="navigate('heritage')">Heritage</a></li><li><a onclick="navigate('story')">Our Story</a></li><li><a onclick="navigate('culture')">Culture</a></li><li><a onclick="navigate('leadership')">Leadership</a></li></ul></div>
+        <div class="footer-col"><h4>Community</h4><ul><li><a onclick="navigate('contact')">Contact</a></li><li><a onclick="navigate('dictionary')">Dictionary</a></li></ul></div>
+        <div class="footer-col"><h4>Social</h4><ul><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li></ul></div>
+        <div class="footer-col"><h4>Info</h4><ul><li><a href="#">Wikipedia</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 Oloma Community, Akoko-Edo LGA, Edo State, Nigeria. All rights reserved.</p><p>Building Oloma's Digital Footprint</p></div>
+    </footer>
+  </div>
+
+  <!-- ══ CONTACT PAGE ══ -->
+  <div id="sub-contact" class="page-inner" style="display:none;">
+    <div class="page-hero">
+      <div class="page-hero-bg"></div>
+      <div class="page-hero-badge">Reach Out</div>
+      <h1>Connect with<br><em>Oloma.</em></h1>
+      <p>Whether you're a community member, diaspora, researcher, or visitor — we'd love to hear from you.</p>
     </div>
-    <div class="footer-links">
-      <h4>Information</h4>
-      <ul>
-        <li><a href="#">History</a></li>
-        <li><a href="#">Development News</a></li>
-        <li><a href="#">How to Get Here</a></li>
-        <li><a href="#">Photo Gallery</a></li>
+    <section class="sec">
+      <div class="contact-grid">
+        <div class="reveal">
+          <div class="slabel">Get in touch</div>
+          <h2 class="stitle">Let's talk<br><em>Oloma.</em></h2>
+          <p class="sbody" style="margin-bottom:2.5rem;">Oloma is always open to connections — at home, in the diaspora, and everywhere our people are.</p>
+          <div style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div style="display:flex;gap:1rem;align-items:flex-start;"><div class="cd-icon">📍</div><div><div class="cd-label">Location</div><div class="cd-val">Oloma, Akoko-Edo LGA, Edo State, Nigeria</div></div></div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;"><div class="cd-icon">📧</div><div><div class="cd-label">Email</div><div class="cd-val">community@oloma.org</div></div></div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;"><div class="cd-icon">🌐</div><div><div class="cd-label">Social</div><div class="cd-val">Facebook · Instagram · YouTube</div></div></div>
+          </div>
+        </div>
+        <div class="reveal" style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="cf-row">
+            <div class="cf-g"><label class="cf-lbl">First Name</label><input class="cf-in" type="text" id="cf-fname" placeholder="Your name"/></div>
+            <div class="cf-g"><label class="cf-lbl">Last Name</label><input class="cf-in" type="text" id="cf-lname" placeholder="Your surname"/></div>
+          </div>
+          <div class="cf-g"><label class="cf-lbl">Email Address</label><input class="cf-in" type="email" id="cf-email" placeholder="you@example.com"/></div>
+          <div class="cf-g">
+            <label class="cf-lbl">Your connection to Oloma</label>
+            <select class="cf-in" id="cf-role">
+              <option value="">Select one</option>
+              <option>Community Member</option><option>Member of Diaspora</option>
+              <option>Researcher / Journalist</option><option>Visitor / Tourist</option>
+              <option>Government Official</option><option>Other</option>
+            </select>
+          </div>
+          <div class="cf-g"><label class="cf-lbl">Message</label><textarea class="cf-in" id="cf-msg" placeholder="What's on your mind?"></textarea></div>
+          <button class="cf-sub" onclick="handleContactSubmit()">Send message →</button>
+        </div>
+      </div>
+    </section>
+    <div class="cta-section">
+      <h2>Ready to connect with<br><em>something great?</em></h2>
+      <p>Join the Oloma community — at home, in the diaspora, and everywhere our people are.</p>
+      <div class="cta-btns">
+        <button class="btn-h" onclick="navigate('heritage')">Explore Heritage</button>
+        <button class="btn-hg" onclick="navigate('dictionary')">Open Dictionary →</button>
+      </div>
+      <p class="cta-note">No requirements · Just community</p>
+    </div>
+    <footer>
+      <div class="footer-top">
+        <div class="footer-brand"><span class="nav-logo" onclick="navigate('home')" style="cursor:pointer;">Oloma<sup style="font-size:.5rem;color:var(--gold)">TM</sup></span><p>The community platform for Oloma — Akoko-Edo LGA, Edo State, Nigeria.</p><div class="fstatus">All systems operational</div></div>
+        <div class="footer-col"><h4>Pages</h4><ul><li><a onclick="navigate('heritage')">Heritage</a></li><li><a onclick="navigate('story')">Our Story</a></li><li><a onclick="navigate('culture')">Culture</a></li><li><a onclick="navigate('leadership')">Leadership</a></li></ul></div>
+        <div class="footer-col"><h4>Community</h4><ul><li><a onclick="navigate('contact')">Contact</a></li><li><a onclick="navigate('dictionary')">Dictionary</a></li></ul></div>
+        <div class="footer-col"><h4>Social</h4><ul><li><a href="#">Facebook</a></li><li><a href="#">Instagram</a></li></ul></div>
+        <div class="footer-col"><h4>Info</h4><ul><li><a href="#">Wikipedia</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 Oloma Community, Akoko-Edo LGA, Edo State, Nigeria. All rights reserved.</p><p>Building Oloma's Digital Footprint</p></div>
+    </footer>
+  </div>
+
+  <!-- ══ DICTIONARY PAGE ══ -->
+  <div id="sub-dictionary" class="page-inner dict-page" style="display:none;">
+    <nav class="dict-nav">
+      <span class="dict-logo" onclick="navigate('home')">Ọ́lọ̀mà<sup>NG</sup></span>
+      <ul class="dict-nav-links">
+        <li><a onclick="navigate('home')">Home</a></li>
+        <li><a onclick="navigate('heritage')">Heritage</a></li>
+        <li><a class="dactive" onclick="navigate('dictionary')">Dictionary</a></li>
       </ul>
+      <div class="dict-nav-btns">
+        <a class="d-btn-g" onclick="navigate('contact')">Community</a>
+        <a class="d-btn-p" href="#dict-admin">Admin</a>
+      </div>
+    </nav>
+    <div class="dict-header">
+      <div class="slabel-d">Language</div>
+      <h1>Ọ́lọ̀mà <em>Mini Dictionary</em></h1>
+      <p>Explore words from the Ọ́lọ̀mà language — a vibrant Edoid language spoken in Oloma community. Words added by admins are saved to Firestore and shared with all visitors.</p>
+      <div style="width:50px;height:1px;background:#B8882A;margin-top:1.5rem;"></div>
+    </div>
+    <div class="dict-controls">
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="dict-search" placeholder="Search Ọ́lọ̀mà or English…" oninput="filterWords()"/>
+      </div>
+      <div class="filter-btns">
+        <button class="filter-btn active" onclick="setDir('all',this)">ALL</button>
+        <button class="filter-btn" onclick="setDir('oloma',this)">ỌLỌMÀ → EN</button>
+        <button class="filter-btn" onclick="setDir('english',this)">EN → ỌLỌMÀ</button>
+      </div>
+      <a class="d-btn-g" href="#dict-admin" style="display:flex;align-items:center;gap:.5rem;text-decoration:none;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Manage Words
+      </a>
+    </div>
+    <div class="alpha-bar" id="dict-alpha-bar">
+      <button class="alpha-btn active" onclick="setAlpha('all',this)">All</button>
+      <span class="result-count" id="dict-result-count"></span>
+    </div>
+
+    <!-- Loading state -->
+    <div class="dict-loading" id="dict-loading">
+      <div class="dict-loading-spin"></div>
+      <p>Loading words from Firestore…</p>
+    </div>
+
+    <div class="word-grid" id="dict-word-grid" style="display:none;"></div>
+    <div class="no-results" id="dict-no-results" style="display:none;">
+      <div class="nr-icon">📭</div>
+      <h3>No words found</h3>
+      <p>Try a different search or add this word via the admin panel below.</p>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="admin-section" id="dict-admin">
+      <div class="slabel-d" style="font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#B8882A;display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;"><span style="display:block;width:20px;height:1px;background:#B8882A;"></span>Admin</div>
+      <h2>Manage <em>Words</em></h2>
+      <div class="admin-lock" id="dict-admin-lock">
+        <div class="lock-icon">🔐</div>
+        <h3>Admin Access</h3>
+        <p>Enter the admin password to add or remove words. New words are saved to Firestore and visible to all visitors instantly.</p>
+        <input type="password" class="pw-field" id="dict-pw-input" placeholder="••••••" onkeydown="if(event.key==='Enter')dictUnlock()"/>
+        <button class="unlock-btn" onclick="dictUnlock()">Unlock Panel</button>
+        <div class="pw-error" id="dict-pw-error">Incorrect password. Please try again.</div>
+      </div>
+      <div class="admin-form" id="dict-admin-form">
+        <h3>Add New Word</h3>
+        <p>Add a new entry to the Ọ́lọ̀mà dictionary. It will be saved to Firestore and appear for all visitors immediately.</p>
+        <div class="d-form-row">
+          <div class="d-form-group"><label>Ọ́lọ̀mà Word</label><input type="text" id="dict-new-oloma" placeholder="e.g. ôʋìnhà"/></div>
+          <div class="d-form-group"><label>English Meaning</label><input type="text" id="dict-new-english" placeholder="e.g. yam"/></div>
+        </div>
+        <div class="d-form-actions">
+          <button class="add-btn" id="dict-add-btn" onclick="dictAddWord()">Add to Firestore</button>
+          <button class="reset-btn" onclick="document.getElementById('dict-new-oloma').value='';document.getElementById('dict-new-english').value=''">Clear</button>
+          <button class="logout-btn" onclick="dictLock()">Lock</button>
+        </div>
+        <div class="add-success" id="dict-add-success">✓ Word saved to Firestore!</div>
+        <div class="admin-word-list">
+          <h4>Firestore Words (<span id="dict-added-count">0</span>)</h4>
+          <div id="dict-added-list"></div>
+        </div>
+      </div>
+    </div>
+    <div class="dict-footer">
+      <span class="dict-footer-logo">Ọ́lọ̀mà</span>
+      <div class="dict-footer-links">
+        <a onclick="navigate('home')">Home</a>
+        <a onclick="navigate('heritage')">Heritage</a>
+        <a onclick="navigate('contact')">Contact</a>
+      </div>
+      <span class="dict-footer-copy">Akoko-Edo · Edo State · Nigeria</span>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p>© 2025 Oloma Community, Akoko-Edo LGA, Edo State, Nigeria. All rights reserved.</p>
-    <p style="color:rgba(255,255,255,0.2); font-size:0.72rem;">Building Oloma's Digital Footprint</p>
-  </div>
-</footer>
 
-<script>
-  /* ── CUSTOM CURSOR ── */
-  const dot  = document.getElementById('cursorDot');
-  const ring = document.getElementById('cursorRing');
-  let mouseX = 0, mouseY = 0;
-  let ringX  = 0, ringY  = 0;
-  let trailTimer = null;
+</div><!-- end page-app -->
 
-  document.addEventListener('mousemove', e => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    dot.style.left = mouseX + 'px';
-    dot.style.top  = mouseY + 'px';
+<!-- ══════════════════════════════════════════════════════
+     FIREBASE SDK (modular, loaded from CDN)
+══════════════════════════════════════════════════════ -->
+<script type="module">
+// ─────────────────────────────────────────────
+// FIREBASE IMPORTS
+// ─────────────────────────────────────────────
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  TwitterAuthProvider,
+  signOut as fbSignOut,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  updateProfile
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Spawn trail particle every ~60ms
-    clearTimeout(trailTimer);
-    trailTimer = setTimeout(() => {
-      const t = document.createElement('div');
-      t.className = 'cursor-trail';
-      t.style.left = mouseX + 'px';
-      t.style.top  = mouseY + 'px';
-      t.style.width  = (Math.random() * 4 + 3) + 'px';
-      t.style.height = t.style.width;
-      document.body.appendChild(t);
-      setTimeout(() => t.remove(), 620);
-    }, 30);
-  });
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyD1QqdVLxMrXXrarLz9NTmHx1NBAOwCTtA",
+  authDomain: "oloma-login.firebaseapp.com",
+  projectId: "oloma-login",
+  storageBucket: "oloma-login.firebasestorage.app",
+  messagingSenderId: "245940493543",
+  appId: "1:245940493543:web:f62b215c2a66b8c0cb1642",
+  measurementId: "G-5G767ZEBG6"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+const twitterProvider = new TwitterAuthProvider();
 
-  /* Lag the ring behind the dot */
-  (function animateRing() {
-    ringX += (mouseX - ringX) * 0.13;
-    ringY += (mouseY - ringY) * 0.13;
-    ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
-    requestAnimationFrame(animateRing);
-  })();
+// Expose to global scope so non-module script functions can call in
+window._fb = { auth, db, googleProvider, twitterProvider,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signInWithPopup, fbSignOut, sendPasswordResetEmail, updateProfile,
+  collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp };
 
-  /* Hover state — grow ring on interactive elements */
-  document.querySelectorAll('a, button, .pillar-card, .leader-card, .culture-card, .stat-item, input, textarea, select').forEach(el => {
-    el.addEventListener('mouseenter', () => { dot.classList.add('hovered'); ring.classList.add('hovered'); });
-    el.addEventListener('mouseleave', () => { dot.classList.remove('hovered'); ring.classList.remove('hovered'); });
-  });
-
-  /* Click burst */
-  document.addEventListener('mousedown', () => dot.classList.add('clicking'));
-  document.addEventListener('mouseup',   () => dot.classList.remove('clicking'));
-
-  /* Hide when leaving window */
-  document.addEventListener('mouseleave', () => { dot.style.opacity='0'; ring.style.opacity='0'; });
-  document.addEventListener('mouseenter', () => { dot.style.opacity='1'; ring.style.opacity='0.7'; });
-
-  /* ── SCROLL PROGRESS BAR ── */
-  const progressBar = document.getElementById('scrollProgress');
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
-    progressBar.style.width = (scrolled / maxScroll * 100) + '%';
-  }, { passive: true });
-
-  /* ── WATERMARK PARALLAX ── */
-  const globalWM = document.getElementById('globalWatermark');
-  window.addEventListener('scroll', () => {
-    const sy = window.scrollY;
-    // Subtle parallax drift
-    globalWM.style.transform = `translate(calc(-50% + ${sy * 0.04}px), calc(-50% + ${sy * -0.02}px))`;
-  }, { passive: true });
-
-  /* ── NAV SHADOW ON SCROLL ── */
-  window.addEventListener('scroll', () => {
-    const nav = document.querySelector('nav');
-    nav.style.boxShadow = window.scrollY > 20 ? '0 4px 24px rgba(0,0,0,0.08)' : 'none';
-  }, { passive: true });
-
-  /* ── SCROLL REVEAL ── */
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        e.target.style.transitionDelay = (e.target.dataset.delay || 0) + 'ms';
-        e.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1 });
-
-  /* Cards stagger */
-  document.querySelectorAll('.pillar-card, .leader-card, .culture-card, .stat-item').forEach((el, i) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease, background 0.3s';
-    el.dataset.delay = (i % 6) * 80;
-    revealObs.observe(el);
-  });
-
-  /* General reveal elements */
-  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
-  /* Make cards visible when observed */
-  const cardObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        setTimeout(() => {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
-        }, parseInt(e.target.dataset.delay || 0));
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.pillar-card, .leader-card, .culture-card, .stat-item').forEach(el => cardObs.observe(el));
-
-  /* ── FORM SUBMIT ── */
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('.btn-submit');
-    btn.textContent = 'Message Sent ✓';
-    btn.style.background = '#4A7A5C';
-    setTimeout(() => {
-      btn.textContent = 'Send Message →';
-      btn.style.background = '';
-    }, 3000);
+// ─────────────────────────────────────────────
+// AUTH STATE LISTENER — auto login if session exists
+// ─────────────────────────────────────────────
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    window._autoLoginUser(user);
   }
+});
+
+// ─────────────────────────────────────────────
+// DICTIONARY — load Firestore words on demand
+// ─────────────────────────────────────────────
+window._loadFirestoreWords = async function() {
+  try {
+    const q = query(collection(db, "dictionary"), orderBy("createdAt", "asc"));
+    const snap = await getDocs(q);
+    const words = [];
+    snap.forEach(d => words.push({ fsId: d.id, ...d.data() }));
+    return words;
+  } catch(e) {
+    console.error("Firestore load error:", e);
+    return [];
+  }
+};
+
+window._addFirestoreWord = async function(oloma, english, addedBy) {
+  const docRef = await addDoc(collection(db, "dictionary"), {
+    oloma, english, addedBy: addedBy || "admin",
+    createdAt: serverTimestamp()
+  });
+  return docRef.id;
+};
+
+window._deleteFirestoreWord = async function(fsId) {
+  await deleteDoc(doc(db, "dictionary", fsId));
+};
+
+// ─────────────────────────────────────────────
+// CONTACT — save to Firestore
+// ─────────────────────────────────────────────
+window._saveContact = async function(data) {
+  await addDoc(collection(db, "contacts"), {
+    ...data, createdAt: serverTimestamp()
+  });
+};
+
+console.log("✅ Firebase initialized · Auth + Firestore ready");
+</script>
+
+<!-- ══════════════════════════════════════════════════════
+     APP SCRIPT (non-module, uses window._fb)
+══════════════════════════════════════════════════════ -->
+<script>
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let currentUser = null;
+let currentSubPage = 'home';
+let heroCanvasInited = false;
+let firestoreWords = [];  // words loaded from Firestore
+let dictLoaded = false;
+let searchDir = 'all';
+let alphaFilter = 'all';
+
+// ═══════════════════════════════════════════════════════
+// CURSOR
+// ═══════════════════════════════════════════════════════
+const cd=document.getElementById('cd'),cr=document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px';});
+(function ar(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(ar);})();
+document.addEventListener('mouseleave',()=>{cd.style.opacity='0';cr.style.opacity='0';});
+document.addEventListener('mouseenter',()=>{cd.style.opacity='1';cr.style.opacity='1';});
+document.addEventListener('mouseover',e=>{
+  if(e.target.matches('a,button,input,select,textarea,.cap-card,.chief-photo,.king-photo,.word-card,.oauth-btn,.auth-tab')){
+    cd.style.width='4px';cd.style.height='4px';cr.style.width='52px';cr.style.height='52px';cr.style.borderColor='rgba(200,154,74,.6)';
+  } else {
+    cd.style.width='6px';cd.style.height='6px';cr.style.width='32px';cr.style.height='32px';cr.style.borderColor='rgba(200,154,74,.4)';
+  }
+});
+
+// Scroll progress + back to top + nav shadow
+const spb=document.getElementById('spb'),backTop=document.getElementById('back-top'),mainNav=document.getElementById('main-nav');
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  spb.style.width=pct+'%';
+  backTop.classList.toggle('visible',window.scrollY>400);
+  mainNav&&mainNav.classList.toggle('scrolled',window.scrollY>20);
+},{passive:true});
+
+// ═══════════════════════════════════════════════════════
+// WEBGL PARTICLES
+// ═══════════════════════════════════════════════════════
+function initParticles(canvasId){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas)return;
+  const gl=canvas.getContext('webgl')||canvas.getContext('experimental-webgl');
+  if(!gl){canvas.style.background='radial-gradient(ellipse 70% 50% at 50% 0%,rgba(200,154,74,.15) 0%,transparent 60%)';return;}
+  const vert=`attribute vec2 a_pos;attribute float a_size;attribute float a_alpha;uniform vec2 u_res;uniform float u_time;varying float v_alpha;void main(){vec2 p=a_pos/u_res*2.0-1.0;p.y=-p.y;gl_Position=vec4(p,0.0,1.0);gl_PointSize=a_size;v_alpha=a_alpha;}`;
+  const frag=`precision mediump float;varying float v_alpha;uniform vec3 u_color;void main(){vec2 uv=gl_PointCoord-0.5;float d=length(uv);float a=smoothstep(0.5,0.2,d)*v_alpha;gl_FragColor=vec4(u_color,a);}`;
+  function cs(src,type){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+  const prog=gl.createProgram();gl.attachShader(prog,cs(vert,gl.VERTEX_SHADER));gl.attachShader(prog,cs(frag,gl.FRAGMENT_SHADER));gl.linkProgram(prog);gl.useProgram(prog);
+  const aPos=gl.getAttribLocation(prog,'a_pos'),aSize=gl.getAttribLocation(prog,'a_size'),aAlpha=gl.getAttribLocation(prog,'a_alpha');
+  const uRes=gl.getUniformLocation(prog,'u_res'),uTime=gl.getUniformLocation(prog,'u_time'),uColor=gl.getUniformLocation(prog,'u_color');
+  const N=180,px=[],py=[],pvx=[],pvy=[],psz=[],pal=[],pph=[];
+  function initP(W,H){px.length=py.length=0;for(let i=0;i<N;i++){px.push(Math.random()*W);py.push(Math.random()*H);const sp=.08+Math.random()*.18,an=Math.random()*Math.PI*2;pvx.push(Math.cos(an)*sp);pvy.push(Math.sin(an)*sp);psz.push(1.2+Math.random()*2.8);pal.push(.15+Math.random()*.5);pph.push(Math.random()*Math.PI*2);}}
+  const pb=gl.createBuffer(),sb=gl.createBuffer(),ab=gl.createBuffer();
+  function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;gl.viewport(0,0,canvas.width,canvas.height);initP(canvas.width,canvas.height);}
+  resize();window.addEventListener('resize',resize);
+  const c2=document.createElement('canvas');c2.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;';
+  canvas.parentElement.insertBefore(c2,canvas.nextSibling);
+  const ctx2=c2.getContext('2d');
+  function sc2(){c2.width=canvas.width;c2.height=canvas.height;}sc2();window.addEventListener('resize',sc2);
+  let mh={x:-9999,y:-9999};
+  canvas.parentElement.addEventListener('mousemove',e=>{const r=canvas.getBoundingClientRect();mh.x=e.clientX-r.left;mh.y=e.clientY-r.top;});
+  let t=0;
+  function anim(){
+    t+=.016;const W=canvas.width,H=canvas.height;
+    for(let i=0;i<N;i++){px[i]+=pvx[i]+Math.sin(t*.4+pph[i])*.04;py[i]+=pvy[i]+Math.cos(t*.3+pph[i])*.03;const dx=px[i]-mh.x,dy=py[i]-mh.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){const f=(120-dist)/120*.3;px[i]+=(dx/dist)*f;py[i]+=(dy/dist)*f;}if(px[i]<0)px[i]=W;if(px[i]>W)px[i]=0;if(py[i]<0)py[i]=H;if(py[i]>H)py[i]=0;}
+    ctx2.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++){for(let j=i+1;j<N;j++){const dx=px[i]-px[j],dy=py[i]-py[j],d=Math.sqrt(dx*dx+dy*dy);if(d<120){ctx2.strokeStyle=`rgba(200,154,74,${(1-d/120)*.18})`;ctx2.lineWidth=.6;ctx2.beginPath();ctx2.moveTo(px[i],py[i]);ctx2.lineTo(px[j],py[j]);ctx2.stroke();}}}
+    gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+    gl.uniform2f(uRes,W,H);gl.uniform1f(uTime,t);gl.uniform3f(uColor,200/255,154/255,74/255);
+    const pos=new Float32Array(N*2),sizes=new Float32Array(N),alphas=new Float32Array(N);
+    for(let i=0;i<N;i++){pos[i*2]=px[i];pos[i*2+1]=py[i];sizes[i]=psz[i]*(1+.15*Math.sin(t+pph[i]));alphas[i]=pal[i]*(.6+.4*Math.sin(t*.7+pph[i]));}
+    gl.bindBuffer(gl.ARRAY_BUFFER,pb);gl.bufferData(gl.ARRAY_BUFFER,pos,gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aPos);gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,sb);gl.bufferData(gl.ARRAY_BUFFER,sizes,gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aSize);gl.vertexAttribPointer(aSize,1,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,ab);gl.bufferData(gl.ARRAY_BUFFER,alphas,gl.DYNAMIC_DRAW);gl.enableVertexAttribArray(aAlpha);gl.vertexAttribPointer(aAlpha,1,gl.FLOAT,false,0,0);
+    gl.drawArrays(gl.POINTS,0,N);requestAnimationFrame(anim);
+  }
+  anim();
+}
+initParticles('landing-canvas');
+
+// ═══════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════
+function showToast(msg,duration=3200){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),duration);
+}
+
+// ═══════════════════════════════════════════════════════
+// AUTH HELPERS
+// ═══════════════════════════════════════════════════════
+function setLoading(btnId, spinId, loading){
+  const btn=document.getElementById(btnId);
+  const spin=document.getElementById(spinId);
+  if(!btn)return;
+  btn.disabled=loading;
+  if(spin)spin.style.display=loading?'block':'none';
+}
+function showError(id,msg){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.textContent=msg;el.style.display='block';
+  setTimeout(()=>el.style.display='none',5000);
+}
+function mapFirebaseError(code){
+  const map={
+    'auth/user-not-found':'No account found with this email.',
+    'auth/wrong-password':'Incorrect password. Please try again.',
+    'auth/email-already-in-use':'This email is already registered. Try signing in.',
+    'auth/weak-password':'Password must be at least 6 characters.',
+    'auth/invalid-email':'Please enter a valid email address.',
+    'auth/popup-closed-by-user':'Sign-in popup was closed. Please try again.',
+    'auth/cancelled-popup-request':'Sign-in was cancelled.',
+    'auth/network-request-failed':'Network error. Please check your connection.',
+    'auth/too-many-requests':'Too many attempts. Please wait a moment and try again.',
+    'auth/invalid-credential':'Invalid email or password.'
+  };
+  return map[code]||'Something went wrong. Please try again.';
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.auth-tab')[tab==='signin'?0:1].classList.add('active');
+  document.getElementById('form-signin').style.display=tab==='signin'?'':'none';
+  document.getElementById('form-signup').style.display=tab==='signup'?'':'none';
+}
+
+// ═══════════════════════════════════════════════════════
+// AUTO LOGIN (called from module's onAuthStateChanged)
+// ═══════════════════════════════════════════════════════
+window._autoLoginUser = function(fbUser) {
+  if(currentUser)return; // already logged in (manual login happened first)
+  const displayName = fbUser.displayName || fbUser.email.split('@')[0];
+  const avatar = fbUser.photoURL
+    ? `<img src="${fbUser.photoURL}" alt=""/>`
+    : displayName[0].toUpperCase();
+  currentUser = { name: displayName, email: fbUser.email, uid: fbUser.uid, avatar };
+  updateNavUser();
+  if(document.getElementById('page-landing').style.display!=='none'){
+    document.getElementById('page-landing').style.display='none';
+    document.getElementById('page-app').style.display='block';
+    navigate('home');
+    if(!heroCanvasInited){setTimeout(()=>{initParticles('hero-canvas');heroCanvasInited=true;},150);}
+    initReveal();
+  }
+};
+
+function updateNavUser(){
+  if(!currentUser)return;
+  const av=currentUser.avatar;
+  const isHtml=typeof av==='string'&&av.startsWith('<');
+  ['nav-av','mob-av'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){isHtml?el.innerHTML=av:el.textContent=av;}
+  });
+  document.getElementById('nav-uname').textContent=currentUser.name;
+  document.getElementById('mob-uname').textContent=currentUser.name;
+}
+
+function loginSuccess(fbUser, displayName){
+  const name = displayName || fbUser.displayName || fbUser.email.split('@')[0];
+  const av = fbUser.photoURL
+    ? `<img src="${fbUser.photoURL}" alt=""/>`
+    : name[0].toUpperCase();
+  currentUser = { name, email: fbUser.email, uid: fbUser.uid, avatar: av };
+  updateNavUser();
+  document.getElementById('page-landing').style.display='none';
+  document.getElementById('page-app').style.display='block';
+  navigate('home');
+  if(!heroCanvasInited){setTimeout(()=>{initParticles('hero-canvas');heroCanvasInited=true;},150);}
+  initReveal();
+}
+
+// ═══════════════════════════════════════════════════════
+// GOOGLE SIGN IN
+// ═══════════════════════════════════════════════════════
+async function oauthGoogle(){
+  const fb=window._fb;if(!fb)return;
+  setLoading('btn-google',null,true);
+  document.getElementById('btn-google').style.opacity='.6';
+  try {
+    const result = await fb.signInWithPopup(fb.auth, fb.googleProvider);
+    showToast(`✓ Signed in with Google`);
+    loginSuccess(result.user);
+  } catch(e) {
+    showToast(mapFirebaseError(e.code));
+  } finally {
+    document.getElementById('btn-google').style.opacity='1';
+    document.getElementById('btn-google').disabled=false;
+  }
+}
+window.oauthGoogle=oauthGoogle;
+
+// ═══════════════════════════════════════════════════════
+// TWITTER SIGN IN
+// ═══════════════════════════════════════════════════════
+async function oauthTwitter(){
+  const fb=window._fb;if(!fb)return;
+  document.getElementById('btn-twitter').style.opacity='.6';
+  try {
+    const result = await fb.signInWithPopup(fb.auth, fb.twitterProvider);
+    showToast(`✓ Signed in with X (Twitter)`);
+    loginSuccess(result.user);
+  } catch(e) {
+    showToast(mapFirebaseError(e.code));
+  } finally {
+    document.getElementById('btn-twitter').style.opacity='1';
+    document.getElementById('btn-twitter').disabled=false;
+  }
+}
+window.oauthTwitter=oauthTwitter;
+
+// ═══════════════════════════════════════════════════════
+// EMAIL SIGN IN
+// ═══════════════════════════════════════════════════════
+async function emailSignIn(){
+  const fb=window._fb;if(!fb)return showToast('Firebase not ready yet. Please wait.');
+  const email=document.getElementById('si-email').value.trim();
+  const pw=document.getElementById('si-pw').value;
+  if(!email||!pw){showError('si-error','Please enter your email and password.');return;}
+  setLoading('btn-signin','spin-signin',true);
+  try {
+    const result = await fb.signInWithEmailAndPassword(fb.auth, email, pw);
+    showToast('✓ Welcome back!');
+    loginSuccess(result.user);
+  } catch(e) {
+    showError('si-error', mapFirebaseError(e.code));
+  } finally {
+    setLoading('btn-signin','spin-signin',false);
+  }
+}
+window.emailSignIn=emailSignIn;
+
+// ═══════════════════════════════════════════════════════
+// EMAIL SIGN UP
+// ═══════════════════════════════════════════════════════
+async function emailSignUp(){
+  const fb=window._fb;if(!fb)return showToast('Firebase not ready yet. Please wait.');
+  const fn=document.getElementById('su-fname').value.trim();
+  const ln=document.getElementById('su-lname').value.trim();
+  const email=document.getElementById('su-email').value.trim();
+  const pw=document.getElementById('su-pw').value;
+  const role=document.getElementById('su-role').value;
+  if(!fn||!ln||!email||pw.length<6||!role){showError('su-error','Please fill all fields. Password must be at least 6 characters.');return;}
+  setLoading('btn-signup','spin-signup',true);
+  try {
+    const result = await fb.createUserWithEmailAndPassword(fb.auth, email, pw);
+    // Update display name
+    await fb.updateProfile(result.user, { displayName: `${fn} ${ln}` });
+    showToast(`✓ Welcome to Oloma, ${fn}!`);
+    loginSuccess(result.user, `${fn} ${ln}`);
+  } catch(e) {
+    showError('su-error', mapFirebaseError(e.code));
+  } finally {
+    setLoading('btn-signup','spin-signup',false);
+  }
+}
+window.emailSignUp=emailSignUp;
+
+// ═══════════════════════════════════════════════════════
+// FORGOT PASSWORD
+// ═══════════════════════════════════════════════════════
+async function forgotPassword(){
+  const fb=window._fb;if(!fb)return;
+  const email=document.getElementById('si-email').value.trim();
+  if(!email){showError('si-error','Enter your email address above first.');return;}
+  try {
+    await fb.sendPasswordResetEmail(fb.auth, email);
+    showToast('✓ Password reset email sent! Check your inbox.');
+  } catch(e) {
+    showError('si-error', mapFirebaseError(e.code));
+  }
+}
+window.forgotPassword=forgotPassword;
+
+// ═══════════════════════════════════════════════════════
+// GUEST
+// ═══════════════════════════════════════════════════════
+function enterAsGuest(){
+  currentUser={name:'Guest',email:'guest',uid:'guest',avatar:'G'};
+  updateNavUser();
+  showToast('Continuing as guest');
+  document.getElementById('page-landing').style.display='none';
+  document.getElementById('page-app').style.display='block';
+  navigate('home');
+  if(!heroCanvasInited){setTimeout(()=>{initParticles('hero-canvas');heroCanvasInited=true;},150);}
+  initReveal();
+}
+window.enterAsGuest=enterAsGuest;
+
+// ═══════════════════════════════════════════════════════
+// SIGN OUT
+// ═══════════════════════════════════════════════════════
+async function signOut(){
+  const fb=window._fb;
+  if(fb&&currentUser&&currentUser.uid!=='guest'){
+    try{await fb.fbSignOut(fb.auth);}catch(e){}
+  }
+  currentUser=null;heroCanvasInited=false;dictLoaded=false;firestoreWords=[];
+  showToast('Signed out. See you soon!');
+  setTimeout(()=>{
+    document.getElementById('page-app').style.display='none';
+    document.getElementById('page-landing').style.display='flex';
+    ['si-email','si-pw','su-fname','su-lname','su-email','su-pw'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    switchTab('signin');
+    document.getElementById('si-error').style.display='none';
+    document.getElementById('su-error').style.display='none';
+  },600);
+}
+window.signOut=signOut;
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+const subPages=['home','heritage','story','culture','leadership','contact','dictionary'];
+function navigate(page){
+  currentSubPage=page;
+  subPages.forEach(p=>{const el=document.getElementById(`sub-${p}`);if(el)el.style.display='none';});
+  const target=document.getElementById(`sub-${page}`);
+  if(target){
+    target.style.display='block';
+    target.style.animation='none';
+    requestAnimationFrame(()=>{target.style.animation='';target.offsetHeight;target.style.animation='pageIn .45s ease both';});
+    window.scrollTo(0,0);
+  }
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('nav-active'));
+  const navEl=document.getElementById(`nav-${page}`);if(navEl)navEl.classList.add('nav-active');
+  if(page==='heritage')initLiveCounters();
+  if(page==='dictionary')initDict();
+  setTimeout(()=>{
+    document.querySelectorAll(`#sub-${page} .cap-card, #sub-${page} .chief-card, #sub-${page} .hstat`).forEach((el,i)=>{
+      el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity .5s ease,transform .5s ease,background .3s,border-color .3s';
+      setTimeout(()=>{el.style.opacity='1';el.style.transform='translateY(0)';},i*60+100);
+    });
+  },50);
+  initReveal();
+}
+window.navigate=navigate;
+
+function initReveal(){
+  setTimeout(()=>{
+    const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.08});
+    document.querySelectorAll('.reveal:not(.in)').forEach(el=>obs.observe(el));
+  },50);
+}
+
+// ═══════════════════════════════════════════════════════
+// LIVE COUNTERS
+// ═══════════════════════════════════════════════════════
+let countersInited=false;
+function initLiveCounters(){
+  if(countersInited)return;
+  const lobs=new IntersectionObserver(entries=>entries.forEach(e=>{
+    if(e.isIntersecting){countUp('lv1',42);countUp('lv2',6);countUp('lv3',12);countUp('lv4',170,'+');countersInited=true;lobs.disconnect();}
+  }),{threshold:.3});
+  const ls=document.querySelector('.live-strip');if(ls)lobs.observe(ls);
+}
+function countUp(id,target,suffix='',dur=2000){
+  const el=document.getElementById(id);if(!el)return;
+  let s=null;const step=ts=>{if(!s)s=ts;const p=Math.min((ts-s)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(e*target)+suffix;if(p<1)requestAnimationFrame(step);};
+  requestAnimationFrame(step);
+}
+
+// ═══════════════════════════════════════════════════════
+// PHOTO UPLOAD
+// ═══════════════════════════════════════════════════════
+function triggerUpload(id){document.getElementById(id).click();}
+window.triggerUpload=triggerUpload;
+function loadImg(input,imgId,phId){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.getElementById(imgId),ph=document.getElementById(phId);
+    img.src=e.target.result;img.style.display='block';ph.style.display='none';
+    showToast('✓ Photo uploaded');
+  };reader.readAsDataURL(file);
+}
+window.loadImg=loadImg;
+
+// ═══════════════════════════════════════════════════════
+// CONTACT FORM — saves to Firestore
+// ═══════════════════════════════════════════════════════
+async function handleContactSubmit(){
+  const fname=document.getElementById('cf-fname').value.trim();
+  const lname=document.getElementById('cf-lname').value.trim();
+  const email=document.getElementById('cf-email').value.trim();
+  const role=document.getElementById('cf-role').value;
+  const msg=document.getElementById('cf-msg').value.trim();
+  if(!fname||!email||!msg){showToast('Please fill in your name, email, and message.');return;}
+  const btn=document.querySelector('.cf-sub');
+  btn.textContent='Sending ···';btn.disabled=true;
+  try {
+    if(window._saveContact){
+      await window._saveContact({firstName:fname,lastName:lname,email,role,message:msg,uid:currentUser?.uid||'guest'});
+    }
+    btn.textContent='Message sent ✓';btn.style.background='var(--green)';btn.style.color='var(--white)';
+    showToast('✓ Message saved! We\'ll be in touch soon.');
+    ['cf-fname','cf-lname','cf-email','cf-msg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    document.getElementById('cf-role').value='';
+    setTimeout(()=>{btn.textContent='Send message →';btn.style.background='';btn.style.color='';btn.disabled=false;},3000);
+  } catch(e) {
+    btn.textContent='Send message →';btn.disabled=false;
+    showToast('Error sending message. Please try again.');
+  }
+}
+window.handleContactSubmit=handleContactSubmit;
+
+// ═══════════════════════════════════════════════════════
+// DICTIONARY — BASE WORDS (built-in, never deleted)
+// ═══════════════════════════════════════════════════════
+const BASE_WORDS=[{"id":1,"oloma":"kù-pós-ò","english":"aboyer"},{"id":2,"oloma":"ɛ̣́kàɹɛ̣́","english":"all"},{"id":3,"oloma":"ɛ́nà mì/ɛ̂nhà","english":"animal"},{"id":4,"oloma":"ghɔ́bɔ̀","english":"arm"},{"id":5,"oloma":"òzínì","english":"arrive"},{"id":6,"oloma":"miń ìè","english":"ask"},{"id":7,"oloma":"né mè zè","english":"attractive"},{"id":8,"oloma":"êshìmì","english":"back"},{"id":9,"oloma":"ghéʃì","english":"bag"},{"id":10,"oloma":"îbɔ́lù","english":"ball"},{"id":11,"oloma":"ívhóvhɔ́ʃà","english":"bark"},{"id":12,"oloma":"âdá","english":"bat"},{"id":13,"oloma":"kɔ̂","english":"bathe/plant"},{"id":14,"oloma":"ɛ̂mà","english":"beans"},{"id":15,"oloma":"ɛ́whɛ́ghìdé","english":"beard"},{"id":16,"oloma":"gbê","english":"beat (a person)"},{"id":17,"oloma":"kpêɹì","english":"beat (drum)"},{"id":18,"oloma":"nó mì","english":"bite"},{"id":19,"oloma":"ɔ́-kpí-kpí","english":"black"},{"id":20,"oloma":"â-zɛ̀","english":"blood"},{"id":21,"oloma":"fhjêzè","english":"blow"},{"id":22,"oloma":"ɔ́gbì","english":"body"},{"id":23,"oloma":"úvwà","english":"bone"},{"id":24,"oloma":"gbê","english":"break"},{"id":25,"oloma":"réŋw̃è","english":"breast"},{"id":26,"oloma":"mâ","english":"build"},{"id":27,"oloma":"shî","english":"bury"},{"id":28,"oloma":"dɛ̂","english":"buy"},{"id":29,"oloma":"ghɛ̂","english":"call"},{"id":30,"oloma":"záhɛ̀","english":"carry"},{"id":31,"oloma":"îmṹsù","english":"cat"},{"id":32,"oloma":"mû","english":"catch"},{"id":33,"oloma":"ókhò","english":"chicken"},{"id":34,"oloma":"ɹɛ́jà","english":"chin"},{"id":35,"oloma":"jɛ̂","english":"choose"},{"id":36,"oloma":"mhû","english":"climb"},{"id":37,"oloma":"ɹêsì","english":"close"},{"id":38,"oloma":"nwhâ zɛ̀","english":"cloth"},{"id":39,"oloma":"ɹɛ́ʋì","english":"cola nut"},{"id":40,"oloma":"ɹésì","english":"come"},{"id":41,"oloma":"ɲié̀","english":"cook"},{"id":42,"oloma":"ɛ̂lá","english":"cow"},{"id":43,"oloma":"shîmì","english":"dance"},{"id":44,"oloma":"ɹébì","english":"darkness"},{"id":45,"oloma":"nɛ̂","english":"defecate"},{"id":46,"oloma":"khêmì","english":"divide"},{"id":47,"oloma":"gháwà","english":"dog"},{"id":48,"oloma":"únú tèkù","english":"door"},{"id":49,"oloma":"víshìnà","english":"dream"},{"id":50,"oloma":"whɔ̂","english":"drink"},{"id":51,"oloma":"ghɔ́whà","english":"dry season"},{"id":52,"oloma":"ghɔ́zɔ̀","english":"ear"},{"id":53,"oloma":"ɹîshì","english":"eat"},{"id":54,"oloma":"ɹɛ́ʧà","english":"egg"},{"id":55,"oloma":"ênì","english":"elephant"},{"id":56,"oloma":"hɔ́ɹì","english":"enter"},{"id":57,"oloma":"únò gò","english":"eye"},{"id":58,"oloma":"îsɔ̀","english":"faeces"},{"id":59,"oloma":"fhâmhì","english":"farm"},{"id":60,"oloma":"íthà","english":"father"},{"id":61,"oloma":"ɔ́ʧɛ̀","english":"fear"},{"id":62,"oloma":"fhônì","english":"finish"},{"id":63,"oloma":"íghèzhà","english":"fire"},{"id":64,"oloma":"gháfɛ́ɹɛ́mì","english":"fish"},{"id":65,"oloma":"ǐshè","english":"five"},{"id":66,"oloma":"fhjânà","english":"fly"},{"id":67,"oloma":"ghɔ́ɹìshì","english":"food"},{"id":68,"oloma":"ɲá hɛ̀","english":"give"},{"id":69,"oloma":"bíà","english":"give birth"},{"id":70,"oloma":"ɲṹ","english":"go"},{"id":71,"oloma":"hɔ̂","english":"grind"},{"id":72,"oloma":"ghɔ́hù","english":"hair"},{"id":73,"oloma":"kɨ-́ wó","english":"hand"},{"id":74,"oloma":"ghíkhà","english":"head"},{"id":75,"oloma":"zhô","english":"hear"},{"id":76,"oloma":"íɹɛ̀ɹù","english":"hoe"},{"id":77,"oloma":"húɹù","english":"hold"},{"id":78,"oloma":"ɔ́kphànì","english":"horn"},{"id":79,"oloma":"âfɛ̀","english":"house"},{"id":80,"oloma":"ghɔ̀ʧàmì","english":"hunger"},{"id":81,"oloma":"óvjòyò","english":"husband"},{"id":82,"oloma":"ɔ́kphò","english":"river"},{"id":83,"oloma":"îghùkhì","english":"moon"},{"id":84,"oloma":"únù","english":"mouth"},{"id":85,"oloma":"ùrì","english":"walk"},{"id":86,"oloma":"âmɛ̀","english":"water"},{"id":87,"oloma":"ôʋìnhà","english":"yam"},{"id":88,"oloma":"ɔ́ʃà","english":"tree"},{"id":89,"oloma":"óvjà","english":"king"},{"id":90,"oloma":"gɔ́ɹɛ̀","english":"road"},{"id":91,"oloma":"ghúmè","english":"salt"},{"id":92,"oloma":"úzàzà","english":"sand"},{"id":93,"oloma":"miń ɛ̀","english":"see"},{"id":94,"oloma":"sû","english":"sing"},{"id":95,"oloma":"zhúzhɔ̀","english":"sit"},{"id":96,"oloma":"fhìsjâ","english":"sleep"},{"id":97,"oloma":"thwôɹò","english":"say"},{"id":98,"oloma":"ìzhónwà","english":"seven"}];
+
+// ═══════════════════════════════════════════════════════
+// DICTIONARY — INIT (loads Firestore words)
+// ═══════════════════════════════════════════════════════
+async function initDict(){
+  if(dictLoaded)return;
+  // Show loading
+  document.getElementById('dict-loading').style.display='block';
+  document.getElementById('dict-word-grid').style.display='none';
+  document.getElementById('dict-no-results').style.display='none';
+
+  // Load from Firestore
+  if(window._loadFirestoreWords){
+    firestoreWords = await window._loadFirestoreWords();
+  }
+  dictLoaded=true;
+
+  document.getElementById('dict-loading').style.display='none';
+  document.getElementById('dict-word-grid').style.display='grid';
+
+  buildAlphaBar();
+  filterWords();
+  if(document.getElementById('dict-admin-form').classList.contains('visible')){
+    renderAddedList();
+  }
+}
+
+function allWords(){
+  const fsFormatted = firestoreWords.map((w,i)=>({
+    id: 1000+i, oloma:w.oloma, english:w.english, fsId:w.fsId, source:'firestore'
+  }));
+  return [...BASE_WORDS, ...fsFormatted];
+}
+
+function buildAlphaBar(){
+  const bar=document.getElementById('dict-alpha-bar');
+  const count=document.getElementById('dict-result-count');
+  // Remove old letter buttons
+  Array.from(bar.children).forEach(c=>{if(c!==count&&c.textContent!=='All')bar.removeChild(c);});
+  const present=new Set(allWords().map(w=>w.english[0].toUpperCase()));
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(l=>{
+    const btn=document.createElement('button');
+    btn.className='alpha-btn'+(present.has(l)?'':' disabled');
+    btn.textContent=l;
+    btn.onclick=function(){if(present.has(l))setAlpha(l,this);};
+    bar.insertBefore(btn,count);
+  });
+}
+
+function setDir(dir,btn){
+  searchDir=dir;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');filterWords();
+}
+window.setDir=setDir;
+
+function setAlpha(letter,btn){
+  alphaFilter=letter;
+  document.querySelectorAll('.alpha-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');filterWords();
+}
+window.setAlpha=setAlpha;
+
+function filterWords(){
+  const q=document.getElementById('dict-search')?document.getElementById('dict-search').value.trim().toLowerCase():'';
+  let words=allWords();
+  if(alphaFilter!=='all')words=words.filter(w=>w.english[0].toUpperCase()===alphaFilter);
+  if(q){words=words.filter(w=>{
+    if(searchDir==='oloma')return w.oloma.toLowerCase().includes(q);
+    if(searchDir==='english')return w.english.toLowerCase().includes(q);
+    return w.oloma.toLowerCase().includes(q)||w.english.toLowerCase().includes(q);
+  });}
+  renderWords(words);
+}
+window.filterWords=filterWords;
+
+function renderWords(words){
+  const grid=document.getElementById('dict-word-grid');
+  const noRes=document.getElementById('dict-no-results');
+  const count=document.getElementById('dict-result-count');
+  if(!grid)return;
+  count.textContent=`Showing ${words.length} of ${allWords().length} words`;
+  if(!words.length){grid.innerHTML='';noRes.style.display='block';return;}
+  noRes.style.display='none';
+  grid.innerHTML=words.map(w=>`
+    <div class="word-card">
+      <div class="word-num">${w.id||''}</div>
+      <div class="word-oloma">${esc(w.oloma)}</div>
+      <div class="word-english">${esc(w.english)}</div>
+      ${w.source==='firestore'?'<div class="word-source">★ community</div>':''}
+    </div>`).join('');
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ═══════════════════════════════════════════════════════
+// DICTIONARY ADMIN — unlock
+// ═══════════════════════════════════════════════════════
+const DICT_PW='Famous';
+function dictUnlock(){
+  const pw=document.getElementById('dict-pw-input').value;
+  if(pw===DICT_PW){
+    document.getElementById('dict-admin-lock').style.display='none';
+    document.getElementById('dict-admin-form').classList.add('visible');
+    document.getElementById('dict-pw-error').style.display='none';
+    renderAddedList();
+  } else {
+    document.getElementById('dict-pw-error').style.display='block';
+    document.getElementById('dict-pw-input').value='';
+  }
+}
+window.dictUnlock=dictUnlock;
+
+function dictLock(){
+  document.getElementById('dict-admin-lock').style.display='block';
+  document.getElementById('dict-admin-form').classList.remove('visible');
+  document.getElementById('dict-pw-input').value='';
+}
+window.dictLock=dictLock;
+
+// ═══════════════════════════════════════════════════════
+// DICTIONARY ADMIN — add word to Firestore
+// ═══════════════════════════════════════════════════════
+async function dictAddWord(){
+  const oloma=document.getElementById('dict-new-oloma').value.trim();
+  const english=document.getElementById('dict-new-english').value.trim();
+  if(!oloma||!english){showToast('Please fill both fields.');return;}
+  const btn=document.getElementById('dict-add-btn');
+  btn.disabled=true;btn.textContent='Saving…';
+  try {
+    if(window._addFirestoreWord){
+      const fsId = await window._addFirestoreWord(oloma, english, currentUser?.email||'admin');
+      firestoreWords.push({fsId, oloma, english});
+    } else {
+      firestoreWords.push({fsId:'local-'+Date.now(), oloma, english});
+    }
+    document.getElementById('dict-new-oloma').value='';
+    document.getElementById('dict-new-english').value='';
+    const s=document.getElementById('dict-add-success');s.style.display='block';setTimeout(()=>s.style.display='none',3000);
+    buildAlphaBar();filterWords();renderAddedList();
+    showToast('✓ Word saved to Firestore!');
+  } catch(e) {
+    showToast('Error saving word: '+e.message);
+  } finally {
+    btn.disabled=false;btn.textContent='Add to Firestore';
+  }
+}
+window.dictAddWord=dictAddWord;
+
+function renderAddedList(){
+  const list=document.getElementById('dict-added-list');
+  document.getElementById('dict-added-count').textContent=firestoreWords.length;
+  if(!firestoreWords.length){list.innerHTML='<p style="font-size:.82rem;color:#999;padding:.5rem 0">No community words yet.</p>';return;}
+  list.innerHTML=firestoreWords.map((w,i)=>`
+    <div class="admin-word-item">
+      <span class="aw-oloma">${esc(w.oloma)}</span>
+      <span class="aw-en">${esc(w.english)}</span>
+      <button class="aw-del" onclick="removeFsWord(${i},'${w.fsId}')">✕</button>
+    </div>`).join('');
+}
+window.renderAddedList=renderAddedList;
+
+async function removeFsWord(i, fsId){
+  if(!confirm('Delete this word from Firestore?'))return;
+  try {
+    if(window._deleteFirestoreWord&&!fsId.startsWith('local-')){
+      await window._deleteFirestoreWord(fsId);
+    }
+    firestoreWords.splice(i,1);
+    buildAlphaBar();filterWords();renderAddedList();
+    showToast('✓ Word deleted from Firestore');
+  } catch(e){showToast('Error deleting: '+e.message);}
+}
+window.removeFsWord=removeFsWord;
+
+// ═══════════════════════════════════════════════════════
+// MOBILE NAV
+// ═══════════════════════════════════════════════════════
+function toggleMobileNav(){
+  const drawer=document.getElementById('mobile-drawer'),btn=document.getElementById('hamburger');
+  const open=drawer.classList.toggle('open');btn.classList.toggle('open',open);
+}
+window.toggleMobileNav=toggleMobileNav;
+function mobileNav(page){
+  const drawer=document.getElementById('mobile-drawer'),btn=document.getElementById('hamburger');
+  drawer.classList.remove('open');btn.classList.remove('open');navigate(page);
+}
+window.mobileNav=mobileNav;
+document.addEventListener('click',e=>{
+  const drawer=document.getElementById('mobile-drawer'),btn=document.getElementById('hamburger');
+  if(drawer&&btn&&!drawer.contains(e.target)&&!btn.contains(e.target)){drawer.classList.remove('open');btn.classList.remove('open');}
+});
+
+// Enter key on sign-in
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('si-pw')?.addEventListener('keydown',e=>{if(e.key==='Enter')emailSignIn();});
+  document.getElementById('su-pw')?.addEventListener('keydown',e=>{if(e.key==='Enter')emailSignUp();});
+});
 </script>
 </body>
 </html>
